@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto
+package by.cisza.smartlistproto.utils
 
 import java.util.*
 
@@ -13,6 +13,6 @@ fun Long.toDateString() : String {
     return "$day.$month.$year"
 }
 
-fun Double.toSum(unit: String) : String {
+fun Double.toAmount(unit: String) : String {
     return "$this $unit"
 }
