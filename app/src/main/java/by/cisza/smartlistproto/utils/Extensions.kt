@@ -13,6 +13,6 @@ fun Long.toDateString() : String {
     return "$day.$month.$year"
 }
 
-fun Double.toAmount(unit: String) : String {
-    return "$this $unit"
+fun Double.toAmount(currency: String) : String {
+    return "$this $currency"
 }

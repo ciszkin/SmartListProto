@@ -15,9 +15,6 @@ import by.cisza.smartlistproto.ui.newrecord.NewRecordDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogListener {
 
     private var _binding: FragmentRecordListBinding? = null
@@ -39,10 +36,8 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        updateList()
         with(binding) {
-            list.adapter = SmartRecordAdapter(viewModel.getRecordsList())
-            list.layoutManager = LinearLayoutManager(context)
-            list.hasFixedSize()
             onFabClick = View.OnClickListener {
                 Log.e("My","It's working!")
             }
@@ -59,5 +54,15 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
 
     override fun onDialogResult(record: SmartRecord) {
         viewModel.addRecord(record)
+        updateList()
+
+    }
+
+    private fun updateList() {
+        with(binding) {
+            list.adapter = SmartRecordAdapter(viewModel.getRecordsList())
+            list.layoutManager = LinearLayoutManager(context)
+            list.hasFixedSize()
+        }
     }
 }

@@ -45,6 +45,10 @@ class NewRecordDialogFragment(fragment: Fragment): BottomSheetDialogFragment() {
             titleTextWatcher = object : TextWatcherImpl() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     viewModel.title = s.toString()
+                    if (!s.isNullOrEmpty()) {
+                        viewModel.titleErrorRes = 0
+                        titleError = false
+                    }
                 }
             }
             descriptionTextWatcher = object : TextWatcherImpl() {
@@ -66,8 +70,12 @@ class NewRecordDialogFragment(fragment: Fragment): BottomSheetDialogFragment() {
                 if (viewModel.validate()) {
                     listener.onDialogResult(viewModel.createRecord())
                     dismiss()
-                } else Snackbar.make(root, "Fill out the fields!", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    titleError = true
+                    newRecordTitle.error = getString(viewModel.titleErrorRes)
+                }
             }
+            newRecordQuantity.editText?.setText(viewModel.quantity.toString())
 
             onCancelClick = View.OnClickListener {
                 dismiss()

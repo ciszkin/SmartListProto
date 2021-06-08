@@ -15,7 +15,7 @@ class NewRecordDialogViewModel: ViewModel() {
     var quantity: Double = 1.0
     var price: Double = 0.0
 
-    private var titleErrorRes  = 0
+    var titleErrorRes  = 0
 
     fun createRecord() : SmartRecord = SmartRecord(
         title = title,

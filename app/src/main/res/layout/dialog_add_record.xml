@@ -28,6 +28,10 @@
             name="onCancelClick"
             type="android.view.View.OnClickListener" />
 
+        <variable
+            name="titleError"
+            type="Boolean" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,6 +61,7 @@
             android:layout_marginHorizontal="@dimen/margin_regular"
             android:layout_marginTop="@dimen/margin_double"
             android:hint="@string/new_record_title"
+            app:errorEnabled="@{titleError}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/new_record_label">
@@ -85,6 +90,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 textWatcher="@{descriptionTextWatcher}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -106,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:digits="@string/digits"
+                android:singleLine="true"
                 textWatcher="@{quantityTextWatcher}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -127,6 +134,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:digits="@string/digits"
+                android:singleLine="true"
                 textWatcher="@{priceTextWatcher}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
