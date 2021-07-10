@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.databinding.DialogAddRecordBinding
 import by.cisza.smartlistproto.domain.SmartRecord
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -33,11 +35,17 @@ class NewRecordDialogFragment(fragment: Fragment): BottomSheetDialogFragment() {
         fun onDialogResult(record: SmartRecord)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
+//        setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DialogAddRecordBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(NewRecordDialogViewModel::class.java)
 

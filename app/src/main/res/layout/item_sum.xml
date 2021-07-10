@@ -8,8 +8,11 @@
         <import type="by.cisza.smartlistproto.utils.ExtensionsKt"/>
 
         <variable
-            name="item"
-            type="by.cisza.smartlistproto.domain.SmartRecord" />
+            name="sum"
+            type="String" />
+        <variable
+            name="currency"
+            type="String" />
 
         <variable
             name="onClick"
@@ -38,58 +41,43 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/item_sum_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_half"
+                    android:text="Total sum:"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/item_sum_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_half"
+                    android:text="@{sum}"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@id/item_sum_label"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="5.43" />
+
+                <TextView
                     android:id="@+id/record_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_half"
-                    android:text="@{item.title}"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/record_date"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Name" />
-
-                <TextView
-                    android:id="@+id/record_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_half"
-                    android:text="@{ExtensionsKt.toDateString(item.date)}"
-                    android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/record_name"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="12.05.2021" />
-
-                <TextView
-                    android:id="@+id/record_description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_half"
-                    android:text="@{item.description}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/record_sum"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/record_name"
-                    tools:text="Description" />
-
-                <TextView
-                    android:id="@+id/record_sum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_half"
-                    android:text="@{ExtensionsKt.toAmount(item.sum, item.currency)}"
-                    android:textSize="16sp"
+                    android:text="@{currency}"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/record_description"
-                    app:layout_constraintTop_toBottomOf="@+id/record_date"
-                    tools:text="55.34 BYN" />
+                    app:layout_constraintStart_toEndOf="@id/item_sum_value"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="BYN"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
