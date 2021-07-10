@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto
+package by.cisza.smartlistproto.ui.recordlist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import by.cisza.smartlistproto.databinding.ItemRecordBinding
 import by.cisza.smartlistproto.databinding.ItemSumBinding
 import by.cisza.smartlistproto.domain.SmartRecord
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class SmartRecordAdapter(source: List<SmartRecord>) : RecyclerView.Adapter<SmartRecordAdapter.ViewHolder>() {
+class SmartRecordAdapter(
+    source: List<SmartRecord>,
+    private val recordController: RecordController
+) : RecyclerView.Adapter<SmartRecordAdapter.ViewHolder>() {
+
+    interface RecordController {
+        fun setIsDone(record: SmartRecord)
+    }
 
     companion object {
         const val TYPE_RECORD = 0
@@ -21,7 +29,11 @@ class SmartRecordAdapter(source: List<SmartRecord>) : RecyclerView.Adapter<Smart
     init {
         if (source.isNotEmpty()) {
             list.clear()
-            list.addAll(source)
+            list.addAll(
+                source.filter {
+                    !it.isDone
+                }
+            )
             val sum = list.sumOf {
                 it.sum
             }
@@ -33,30 +45,44 @@ class SmartRecordAdapter(source: List<SmartRecord>) : RecyclerView.Adapter<Smart
                     quantity = 1.0,
                     price = sum,
                     sum = sum,
-                    unit ="",
+                    isDone = false,
                     currency = "BYN"
                 )
             )
         }
     }
 
-    abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(item: Any)
     }
 
-    class RecordViewHolder(private val binding: ItemRecordBinding) : ViewHolder(binding.root) {
+    inner class RecordViewHolder(private val binding: ItemRecordBinding) : ViewHolder(binding.root) {
         override fun bind(item: Any) {
             binding.apply {
                 this.item = item as SmartRecord
                 onClick = View.OnClickListener { view ->
-                    Toast.makeText(view.context, "Price: ${item.price}", Toast.LENGTH_SHORT).show()
+                    view.showDescriptionDialog(item as SmartRecord)
+                }
+                this.onDoneClick =
+                    View.OnClickListener { view ->
+                    recordController.setIsDone(item as SmartRecord)
                 }
                 executePendingBindings()
             }
         }
     }
 
-    class SumViewHolder(private val binding: ItemSumBinding) : ViewHolder(binding.root) {
+    private fun View.showDescriptionDialog(record: SmartRecord) {
+        if (!record.description.isNullOrEmpty()) {
+            MaterialAlertDialogBuilder(this.context)
+                .setTitle(record.title)
+                .setMessage(record.description)
+                .setNeutralButton("OK", null)
+                .show()
+        }
+    }
+
+    inner class SumViewHolder(private val binding: ItemSumBinding) : ViewHolder(binding.root) {
         override fun bind(item: Any) {
             binding.apply {
                 sum = (item as SmartRecord).sum.toString()

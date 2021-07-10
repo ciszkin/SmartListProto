@@ -7,7 +7,7 @@ import java.util.*
 
 class NewRecordDialogViewModel: ViewModel() {
 
-    var unit: String = "piece"
+    var isDone: Boolean = false
     var currency: String = "BYN"
 
     var title: String = ""
@@ -24,7 +24,7 @@ class NewRecordDialogViewModel: ViewModel() {
         quantity = quantity,
         price = price,
         sum = quantity*price,
-        unit = unit,
+        isDone = isDone,
         currency = currency
     )
 

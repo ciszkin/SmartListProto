@@ -15,6 +15,10 @@
             name="onClick"
             type="android.view.View.OnClickListener" />
 
+        <variable
+            name="onDoneClick"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +41,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/is_done"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:onClick="@{onDoneClick}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/record_name"
                     android:layout_width="0dp"
@@ -46,7 +60,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/record_date"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/is_done"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Name" />
 
@@ -69,10 +83,12 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_half"
                     android:text="@{item.description}"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/record_sum"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/is_done"
                     app:layout_constraintTop_toBottomOf="@+id/record_name"
                     tools:text="Description" />
 

@@ -11,7 +11,7 @@ data class SmartRecord(
     val quantity: Double,
     val price: Double,
     val sum: Double,
-    val unit: String,
+    val isDone: Boolean = false,
     val currency: String,
     val tags: List<String> = emptyList()
 ): Parcelable

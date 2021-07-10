@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="by.cisza.smartlistproto.RecordListFragment"
+        android:name="by.cisza.smartlistproto.ui.recordlist.RecordListFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_record_list">
 
