@@ -12,7 +12,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SmartRecordAdapter(
     source: List<SmartRecord>,
-    private val recordController: RecordController
+    private val recordController: RecordController,
 ) : RecyclerView.Adapter<SmartRecordAdapter.ViewHolder>() {
 
     interface RecordController {
@@ -56,37 +56,36 @@ class SmartRecordAdapter(
         abstract fun bind(item: Any)
     }
 
-    inner class RecordViewHolder(private val binding: ItemRecordBinding) : ViewHolder(binding.root) {
+    inner class RecordViewHolder(private val binding: ItemRecordBinding) :
+        ViewHolder(binding.root) {
         override fun bind(item: Any) {
             binding.apply {
                 this.item = item as SmartRecord
-                onClick = View.OnClickListener { view ->
-                    view.showDescriptionDialog(item as SmartRecord)
+                onItemClick = View.OnClickListener { view ->
+                    view.showDescriptionDialog(item)
                 }
-                this.onDoneClick =
+                onDoneClick =
                     View.OnClickListener { view ->
-                    recordController.setIsDone(item as SmartRecord)
-                }
+                        recordController.setIsDone(item)
+                    }
                 executePendingBindings()
             }
         }
     }
 
     private fun View.showDescriptionDialog(record: SmartRecord) {
-        if (!record.description.isNullOrEmpty()) {
-            MaterialAlertDialogBuilder(this.context)
-                .setTitle(record.title)
-                .setMessage(record.description)
-                .setNeutralButton("OK", null)
-                .show()
-        }
+        MaterialAlertDialogBuilder(this.context)
+            .setTitle(record.title)
+            .setMessage(record.description)
+            .setNeutralButton("OK", null)
+            .show()
     }
 
     inner class SumViewHolder(private val binding: ItemSumBinding) : ViewHolder(binding.root) {
         override fun bind(item: Any) {
             binding.apply {
                 sum = (item as SmartRecord).sum.toString()
-                currency = "BYN"
+                currency = item.currency
             }
         }
 

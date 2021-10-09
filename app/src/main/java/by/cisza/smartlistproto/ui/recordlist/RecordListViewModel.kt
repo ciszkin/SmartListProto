@@ -25,7 +25,7 @@ class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
         newList.add(record)
         _records.value = newList
 
-        Log.e("MyDebug", "new list from records: ${records.value}")
+//        Log.e("MyDebug", "new list from records: ${records.value}")
 //        records.add(record)
     }
 

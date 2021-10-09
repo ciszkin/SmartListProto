@@ -3,6 +3,7 @@ package by.cisza.smartlistproto.ui.newrecord
 import androidx.lifecycle.ViewModel
 import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.utils.round
 import java.util.*
 
 class NewRecordDialogViewModel: ViewModel() {
@@ -23,7 +24,7 @@ class NewRecordDialogViewModel: ViewModel() {
         description = description,
         quantity = quantity,
         price = price,
-        sum = quantity*price,
+        sum = (quantity*price).round(2),
         isDone = isDone,
         currency = currency
     )

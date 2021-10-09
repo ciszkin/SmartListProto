@@ -42,7 +42,7 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.records.collect { newList ->
                     updateList(newList)
-                    Log.e("MyDebug", "New list: ${newList}")
+//                    Log.e("MyDebug", "New list: ${newList}")
                 }
             }
         }
@@ -73,7 +73,7 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
 
 //        updateList()
         with(binding) {
-            bottomSheet = BottomSheetBehavior.from(this!!.bottomSheetTotal)
+            bottomSheet = BottomSheetBehavior.from(this!!.bottomSheetReceipt)
             this.onFabClick = View.OnClickListener {
                 NewRecordDialogFragment(this@RecordListFragment).show(
                     childFragmentManager,
@@ -104,7 +104,7 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
     override fun onDialogResult(record: SmartRecord) {
         viewModel.addRecord(record)
         updateList(viewModel.records.value)
-        bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+//        bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
 
     }
 
@@ -118,9 +118,21 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
                 )
                 list.layoutManager = LinearLayoutManager(context)
                 list.hasFixedSize()
-                totalSum = newList.sumOf { record ->
-                    record.sum
-                }.toString()
+                val sum = newList.sumOf { record ->
+                    if (record.isDone) record.sum else 0.0
+                }
+
+                receiptVisible = sum > 0.0
+                if (sum > 0.0) {
+                    totalSum = sum.toString()
+                    receiptList.adapter = ReceiptSmartRecordAdapter(
+                        source = newList,
+                        recordController = viewModel,
+//                        isReceipt = true
+                    )
+                    receiptList.layoutManager = LinearLayoutManager(context)
+                    receiptList.hasFixedSize()
+                }
             }
         }
     }

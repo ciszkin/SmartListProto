@@ -12,7 +12,7 @@
             type="by.cisza.smartlistproto.domain.SmartRecord" />
 
         <variable
-            name="onClick"
+            name="onItemClick"
             type="android.view.View.OnClickListener" />
 
         <variable
@@ -31,7 +31,7 @@
             android:layout_marginHorizontal="@dimen/margin_half"
             android:layout_marginVertical="@dimen/margin_half"
             app:cardElevation="@dimen/elevation"
-            android:onClick="@{onClick}"
+            android:onClick="@{onItemClick}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,24 +58,22 @@
                     android:layout_margin="@dimen/margin_half"
                     android:text="@{item.title}"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/record_date"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintEnd_toStartOf="@+id/record_quantity_and_price"
                     app:layout_constraintStart_toEndOf="@id/is_done"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Name" />
 
                 <TextView
-                    android:id="@+id/record_date"
+                    android:id="@+id/record_quantity_and_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_half"
-                    android:text="@{ExtensionsKt.toDateString(item.date)}"
+                    android:text='@{String.valueOf(item.quantity).concat(" x ").concat(String.valueOf(item.price)).concat(item.currency)}'
                     android:textStyle="italic"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/record_name"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="12.05.2021" />
+                    tools:text="7 x 5.22 BYN" />
+
 
                 <TextView
                     android:id="@+id/record_description"
@@ -104,8 +102,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/record_description"
-                    app:layout_constraintTop_toBottomOf="@+id/record_date"
-                    tools:text="55.34 BYN" />
+                    app:layout_constraintTop_toBottomOf="@+id/record_quantity_and_price"
+                    tools:text="36.54 BYN" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>

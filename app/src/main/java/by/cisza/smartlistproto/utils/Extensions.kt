@@ -1,7 +1,7 @@
 package by.cisza.smartlistproto.utils
 
 import java.util.*
-import kotlin.math.roundToInt
+import kotlin.math.round
 
 fun Long.toDateString() : String {
     val calendar = Calendar.getInstance()
@@ -15,9 +15,11 @@ fun Long.toDateString() : String {
 }
 
 fun Double.toAmount(currency: String) : String {
-    return "$this $currency"
+    return "${this.round(2)} $currency"
 }
 
-fun Double.round(precision: Int) : Double {
-    return (this*(10.0.times(precision))).roundToInt()/(10.0.times(precision))
+fun Double.round(decimals: Int): Double {
+    var multiplier = 1.0
+    repeat(decimals) { multiplier *= 10 }
+    return round(this * multiplier) / multiplier
 }
