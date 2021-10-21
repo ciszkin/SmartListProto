@@ -19,4 +19,5 @@
     <string name="create_new_record_button">Create!</string>
     <string name="cancel_new_record_button">Cancel</string>
     <string name="bottom_sheet_total_label">Total:</string>
+    <string name="fulfil_button">Fulfil</string>
 </resources>

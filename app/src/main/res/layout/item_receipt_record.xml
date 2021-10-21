@@ -9,7 +9,7 @@
 
         <variable
             name="item"
-            type="by.cisza.smartlistproto.domain.SmartRecord" />
+            type="by.cisza.smartlistproto.domain.Receipt.ReceiptItem" />
 
         <variable
             name="onItemClick"
@@ -30,7 +30,8 @@
             android:id="@+id/record_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_half"
+            android:layout_marginVertical="@dimen/margin_half"
+            android:layout_marginHorizontal="@dimen/margin_regular"
             android:text="@{item.title}"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/record_quantity_and_price"

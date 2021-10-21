@@ -3,21 +3,24 @@ package by.cisza.smartlistproto.ui.recordlist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import by.cisza.smartlistproto.databinding.ItemRecordBinding
 import by.cisza.smartlistproto.databinding.ItemSumBinding
 import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogFragment
+import by.cisza.smartlistproto.utils.round
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SmartRecordAdapter(
+    private val fragment: Fragment,
     source: List<SmartRecord>,
-    private val recordController: RecordController,
+//    private val recordController: RecordController,
 ) : RecyclerView.Adapter<SmartRecordAdapter.ViewHolder>() {
 
-    interface RecordController {
-        fun setIsDone(record: SmartRecord)
-    }
+//    interface RecordController {
+//        fun setCompleted(record: SmartRecord, completedQuantity: Double, completedPrice: Double)
+//    }
 
     companion object {
         const val TYPE_RECORD = 0
@@ -31,21 +34,19 @@ class SmartRecordAdapter(
             list.clear()
             list.addAll(
                 source.filter {
-                    !it.isDone
+                    it.quantityLeft > 0.0
                 }
             )
             val sum = list.sumOf {
-                it.sum
+                ((it.quantity - it.completedQuantity) * it.price).round(2)
             }
             list.add(
                 SmartRecord(
+                    id = 0L,
                     title = "",
-                    date = 0L,
                     description = null,
                     quantity = 1.0,
                     price = sum,
-                    sum = sum,
-                    isDone = false,
                     currency = "BYN"
                 )
             )
@@ -66,7 +67,7 @@ class SmartRecordAdapter(
                 }
                 onDoneClick =
                     View.OnClickListener { view ->
-                        recordController.setIsDone(item)
+                        fragment.showFulfilDialog(item)
                     }
                 executePendingBindings()
             }
@@ -79,6 +80,10 @@ class SmartRecordAdapter(
             .setMessage(record.description)
             .setNeutralButton("OK", null)
             .show()
+    }
+
+    private fun Fragment.showFulfilDialog(record: SmartRecord) {
+        FulfilmentDialogFragment(this, record).show(childFragmentManager, "fulfilmentDialog")
     }
 
     inner class SumViewHolder(private val binding: ItemSumBinding) : ViewHolder(binding.root) {

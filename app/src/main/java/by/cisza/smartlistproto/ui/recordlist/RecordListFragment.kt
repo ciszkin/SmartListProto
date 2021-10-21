@@ -1,7 +1,6 @@
 package by.cisza.smartlistproto.ui.recordlist
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.cisza.smartlistproto.databinding.FragmentRecordListBinding
+import by.cisza.smartlistproto.domain.Receipt.ReceiptItem
 import by.cisza.smartlistproto.domain.SmartRecord
-import by.cisza.smartlistproto.ui.newrecord.NewRecordDialogFragment
+import by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogFragment
+import by.cisza.smartlistproto.ui.record.RecordDialogFragment
+import by.cisza.smartlistproto.utils.round
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -22,9 +24,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
-class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogListener {
+class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener,
+    FulfilmentDialogFragment.FulfilmentDialogListener {
 
     private var _binding: FragmentRecordListBinding? = null
+
     @ExperimentalCoroutinesApi
     private lateinit var viewModel: RecordListViewModel
     private lateinit var bottomSheet: BottomSheetBehavior<ConstraintLayout>
@@ -46,6 +50,15 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.receiptItems.collect { newItems ->
+                    updateReceipt(newItems)
+//                    Log.e("MyDebug", "New list: ${newList}")
+                }
+            }
+        }
     }
 
     @ExperimentalCoroutinesApi
@@ -55,15 +68,6 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
     ): View {
         viewModel = ViewModelProvider(this).get(RecordListViewModel::class.java)
         _binding = FragmentRecordListBinding.inflate(inflater, container, false)
-
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                viewModel.records.collect { newList ->
-//                    updateList(viewModel.records.value)
-//                    Log.e("MyDebug", "New list: ${viewModel.records.value}")
-//                }
-//            }
-//        }
 
         return binding!!.root
     }
@@ -75,7 +79,7 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
         with(binding) {
             bottomSheet = BottomSheetBehavior.from(this!!.bottomSheetReceipt)
             this.onFabClick = View.OnClickListener {
-                NewRecordDialogFragment(this@RecordListFragment).show(
+                RecordDialogFragment(this@RecordListFragment).show(
                     childFragmentManager,
                     "NewRecordDialog"
                 )
@@ -108,30 +112,42 @@ class RecordListFragment : Fragment(), NewRecordDialogFragment.NewRecordDialogLi
 
     }
 
+    @ExperimentalCoroutinesApi
+    override fun onDialogResult(receiptItem: ReceiptItem) {
+        viewModel.fulfilRecord(receiptItem)
+    }
+
     private fun updateList(newList: List<SmartRecord>) {
         if (binding != null) {
             with(binding) {
-    //            val newList = viewModel.getRecordsList()
                 this!!.list.adapter = SmartRecordAdapter(
+                    fragment = this@RecordListFragment,
                     source = newList,
-                    recordController = viewModel
+//                    recordController = viewModel
                 )
                 list.layoutManager = LinearLayoutManager(context)
                 list.hasFixedSize()
-                val sum = newList.sumOf { record ->
-                    if (record.isDone) record.sum else 0.0
+            }
+        }
+    }
+
+    private fun updateReceipt(newItems: List<ReceiptItem>) {
+        if (binding != null) {
+            with(binding) {
+                val sum = newItems.sumOf {
+                    it.sum
                 }
 
-                receiptVisible = sum > 0.0
+                this!!.receiptVisible = sum > 0.0
                 if (sum > 0.0) {
                     totalSum = sum.toString()
-                    receiptList.adapter = ReceiptSmartRecordAdapter(
-                        source = newList,
-                        recordController = viewModel,
-//                        isReceipt = true
+                    receiptList.adapter = ReceiptItemsAdapter(
+                        source = newItems,
+//                        recordController = viewModel
                     )
                     receiptList.layoutManager = LinearLayoutManager(context)
                     receiptList.hasFixedSize()
+
                 }
             }
         }

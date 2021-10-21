@@ -3,18 +3,16 @@ package by.cisza.smartlistproto.ui.recordlist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import by.cisza.smartlistproto.databinding.ItemReceiptRecordBinding
-import by.cisza.smartlistproto.databinding.ItemRecordBinding
-import by.cisza.smartlistproto.databinding.ItemSumBinding
+import by.cisza.smartlistproto.domain.Receipt
+import by.cisza.smartlistproto.domain.Receipt.ReceiptItem
 import by.cisza.smartlistproto.domain.SmartRecord
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ReceiptSmartRecordAdapter(
-    source: List<SmartRecord>,
-    private val recordController: SmartRecordAdapter.RecordController
-) : RecyclerView.Adapter<ReceiptSmartRecordAdapter.ViewHolder>() {
+class ReceiptItemsAdapter(
+    source: List<ReceiptItem>,
+//    private val recordController: SmartRecordAdapter.RecordController
+) : RecyclerView.Adapter<ReceiptItemsAdapter.ViewHolder>() {
 
 //    interface RecordController {
 //        fun setIsDone(record: SmartRecord)
@@ -24,16 +22,14 @@ class ReceiptSmartRecordAdapter(
         const val TYPE_RECORD = 0
         const val TYPE_SUM = 1
 
-        private var list: MutableList<SmartRecord> = mutableListOf()
+        private var list: MutableList<ReceiptItem> = mutableListOf()
     }
 
     init {
         if (source.isNotEmpty()) {
             list.clear()
             list.addAll(
-                source.filter {
-                    it.isDone
-                }
+                source
             )
         }
     }
@@ -46,7 +42,7 @@ class ReceiptSmartRecordAdapter(
         ViewHolder(binding.root) {
         override fun bind(item: Any) {
             binding.apply {
-                this.item = item as SmartRecord
+                this.item = item as ReceiptItem
 //                onItemClick = View.OnClickListener { view ->
 //                    view.showDescriptionDialog(item)
 //                }

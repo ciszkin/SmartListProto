@@ -1,17 +1,25 @@
 package by.cisza.smartlistproto.domain
 
 import android.os.Parcelable
+import by.cisza.smartlistproto.utils.round
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SmartRecord(
+    val id: Long,
     val title: String,
-    val date: Long,
     val description: String? = null,
     val quantity: Double,
+    val completedQuantity: Double = 0.0,
     val price: Double,
-    val sum: Double,
-    val isDone: Boolean = false,
     val currency: String,
     val tags: List<String> = emptyList()
-): Parcelable
+): Parcelable {
+
+    @IgnoredOnParcel
+    val sum = ((quantity - completedQuantity) * price).round(2)
+
+    @IgnoredOnParcel
+    val quantityLeft = quantity - completedQuantity
+}

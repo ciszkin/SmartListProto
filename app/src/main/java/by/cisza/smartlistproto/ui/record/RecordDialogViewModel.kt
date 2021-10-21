@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.ui.newrecord
+package by.cisza.smartlistproto.ui.record
 
 import androidx.lifecycle.ViewModel
 import by.cisza.smartlistproto.R
@@ -6,7 +6,7 @@ import by.cisza.smartlistproto.domain.SmartRecord
 import by.cisza.smartlistproto.utils.round
 import java.util.*
 
-class NewRecordDialogViewModel: ViewModel() {
+class RecordDialogViewModel: ViewModel() {
 
     var isDone: Boolean = false
     var currency: String = "BYN"
@@ -19,13 +19,11 @@ class NewRecordDialogViewModel: ViewModel() {
     var titleErrorRes  = 0
 
     fun createRecord() : SmartRecord = SmartRecord(
+        id = Calendar.getInstance().timeInMillis,
         title = title,
-        date = Calendar.getInstance().timeInMillis,
         description = description,
         quantity = quantity,
         price = price,
-        sum = (quantity*price).round(2),
-        isDone = isDone,
         currency = currency
     )
 

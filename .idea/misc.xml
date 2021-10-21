@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.2833333333333333" />
-        <entry key="app/src/main/res/layout/fragment_record_list.xml" value="0.4569045412418906" />
+        <entry key="app/src/main/res/layout/dialog_add_record.xml" value="0.18177083333333333" />
+        <entry key="app/src/main/res/layout/dialog_fulfilment.xml" value="0.3692708333333333" />
+        <entry key="app/src/main/res/layout/fragment_record_list.xml" value="0.3979475484606613" />
         <entry key="app/src/main/res/layout/item_receipt_record.xml" value="0.67" />
         <entry key="app/src/main/res/layout/item_record.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_sum.xml" value="0.21822916666666667" />

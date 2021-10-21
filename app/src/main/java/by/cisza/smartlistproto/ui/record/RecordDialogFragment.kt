@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.ui.newrecord
+package by.cisza.smartlistproto.ui.record
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,35 +10,32 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import by.cisza.smartlistproto.R
-import by.cisza.smartlistproto.databinding.DialogAddRecordBinding
+import by.cisza.smartlistproto.databinding.DialogRecordBinding
 import by.cisza.smartlistproto.domain.SmartRecord
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import java.lang.ClassCastException
 
-class NewRecordDialogFragment(fragment: Fragment): BottomSheetDialogFragment() {
+class RecordDialogFragment(fragment: Fragment): DialogFragment() {
 
-    private lateinit var listener: NewRecordDialogListener
-    private lateinit var binding: DialogAddRecordBinding
-    private lateinit var viewModel: NewRecordDialogViewModel
+    private lateinit var listener: RecordDialogListener
+    private lateinit var binding: DialogRecordBinding
+    private lateinit var viewModel: RecordDialogViewModel
 
     init {
         try {
-            listener = fragment as NewRecordDialogListener
+            listener = fragment as RecordDialogListener
         } catch (e: ClassCastException) {
             Toast.makeText(context, "${context.toString()} must implement DialogListener!", Toast.LENGTH_SHORT).show()
         }
     }
 
-    interface NewRecordDialogListener {
+    interface RecordDialogListener {
         fun onDialogResult(record: SmartRecord)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
-//        setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
+//        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
+        setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
     }
 
     override fun onCreateView(
@@ -46,8 +43,8 @@ class NewRecordDialogFragment(fragment: Fragment): BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DialogAddRecordBinding.inflate(inflater)
-        viewModel = ViewModelProvider(this).get(NewRecordDialogViewModel::class.java)
+        binding = DialogRecordBinding.inflate(inflater)
+        viewModel = ViewModelProvider(this).get(RecordDialogViewModel::class.java)
 
         binding.apply {
             titleTextWatcher = object : TextWatcherImpl() {

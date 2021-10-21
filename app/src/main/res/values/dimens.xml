@@ -9,4 +9,5 @@
     <dimen name="elevation">2dp</dimen>
     <dimen name="text_large">16sp</dimen>
     <dimen name="margin_top_recycler">60dp</dimen>
+    <dimen name="bottomSheetHeight">40dp</dimen>
 </resources>

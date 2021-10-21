@@ -52,7 +52,7 @@
             android:contentDescription="@null"
             android:onClick="@{onFabClick}"
             app:layout_anchor="@id/bottom_sheet_receipt"
-            app:layout_anchorGravity="bottom|end"
+            app:layout_anchorGravity="top|end"
             app:srcCompat="@drawable/ic_add" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bottom_sheet_shape"
             android:paddingBottom="@dimen/margin_double"
-            app:behavior_peekHeight="32dp"
+            app:behavior_peekHeight="@dimen/bottomSheetHeight"
             android:visibility="@{receiptVisible ? View.VISIBLE : View.INVISIBLE}"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
