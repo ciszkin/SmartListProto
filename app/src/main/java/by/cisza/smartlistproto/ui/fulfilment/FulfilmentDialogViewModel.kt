@@ -10,12 +10,17 @@ import java.util.*
 
 class FulfilmentDialogViewModel: ViewModel() {
 
-    var currentRecord: SmartRecord? = null
-
-    var quantity: Double = 1.0
+    var quantity: Double = 0.0
     var price: Double = 0.0
 
+    val totalSum = (quantity * price).round(2)
 
+    var currentRecord: SmartRecord? = null
+    set(value) {
+        quantity = value?.quantityLeft ?: 0.0
+        price = value?.price ?: 0.0
+        field = value
+    }
 
     fun fulfilRecord() : ReceiptItem {
         return ReceiptItem(
@@ -23,6 +28,16 @@ class FulfilmentDialogViewModel: ViewModel() {
             title = currentRecord!!.title,
             quantity = quantity,
             price = price,
+            currency = currentRecord!!.currency
+        )
+    }
+
+    fun returnRecord() : ReceiptItem {
+        return ReceiptItem(
+            recordId = currentRecord!!.id,
+            title = currentRecord!!.title,
+            quantity = 0.0,
+            price = currentRecord!!.price,
             currency = currentRecord!!.currency
         )
     }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @ExperimentalCoroutinesApi
-class RecordListViewModel : ViewModel() {
+class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
 
     private val _records = MutableStateFlow(listOf<SmartRecord>())
     val records: StateFlow<List<SmartRecord>>
@@ -41,16 +41,21 @@ class RecordListViewModel : ViewModel() {
         }
 
         if (record != null) {
-//            val position = records.value.indexOf(record)
-//            val newRecord = record.copy(
-//                completedQuantity = receiptItem.quantity
-//            )
-//            val newList = mutableListOf<SmartRecord>()
-//            newList.addAll(records.value)
-//            newList.remove(record)
-//            newList.add(position, newRecord)
             _records.value = _records.value.map {
-                if (it == record) it.copy(completedQuantity = receiptItem.quantity) else it
+                if (it == record) {
+                    val newCompletedQuantity = it.completedQuantity + receiptItem.quantity
+                    when {
+                        newCompletedQuantity <= it.quantity -> {
+                            it.copy(completedQuantity = newCompletedQuantity)
+                        }
+                        newCompletedQuantity > it.quantity -> {
+                            it.copy(completedQuantity = newCompletedQuantity, quantity = newCompletedQuantity)
+                        }
+                        else -> {
+                            it.copy()
+                        }
+                    }
+                } else it
             }
         }
 
@@ -69,6 +74,12 @@ class RecordListViewModel : ViewModel() {
             _receiptItems.value = newItems
         }
 
+    }
+
+    override fun restoreRecord(record: SmartRecord) {
+        _records.value = _records.value.map {
+            if (it == record) it.copy(completedQuantity = 0.0) else it
+        }
     }
 
 }

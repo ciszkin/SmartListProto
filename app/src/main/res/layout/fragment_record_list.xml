@@ -58,7 +58,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_sheet_receipt"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="320dp"
             android:background="@drawable/bottom_sheet_shape"
             android:paddingBottom="@dimen/margin_double"
             app:behavior_peekHeight="@dimen/bottomSheetHeight"

@@ -15,18 +15,20 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class SmartRecordAdapter(
     private val fragment: Fragment,
     source: List<SmartRecord>,
-//    private val recordController: RecordController,
+    private val recordController: RecordController,
 ) : RecyclerView.Adapter<SmartRecordAdapter.ViewHolder>() {
 
-//    interface RecordController {
-//        fun setCompleted(record: SmartRecord, completedQuantity: Double, completedPrice: Double)
-//    }
+    interface RecordController {
+        fun restoreRecord(record: SmartRecord)
+    }
 
     companion object {
         const val TYPE_RECORD = 0
         const val TYPE_SUM = 1
 
         private var list: MutableList<SmartRecord> = mutableListOf()
+
+        private var sumPosition = 0
     }
 
     init {
@@ -37,6 +39,9 @@ class SmartRecordAdapter(
                     it.quantityLeft > 0.0
                 }
             )
+//            list.sortByDescending {
+//                it.quantityLeft > 0
+//            }
             val sum = list.sumOf {
                 ((it.quantity - it.completedQuantity) * it.price).round(2)
             }
@@ -49,6 +54,12 @@ class SmartRecordAdapter(
                     price = sum,
                     currency = "BYN"
                 )
+            )
+            sumPosition = list.lastIndex
+            list.addAll(
+                source.filter {
+                    it.quantityLeft <= 0.0
+                }
             )
         }
     }
@@ -67,7 +78,12 @@ class SmartRecordAdapter(
                 }
                 onDoneClick =
                     View.OnClickListener { view ->
-                        fragment.showFulfilDialog(item)
+                        if (item.quantityLeft > 0.0) {
+                            fragment.showFulfilDialog(item)
+                        } else {
+                            isDone.isChecked = false
+                            recordController.restoreRecord(item)
+                        }
                     }
                 executePendingBindings()
             }
@@ -109,7 +125,7 @@ class SmartRecordAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            list.lastIndex -> TYPE_SUM
+            sumPosition -> TYPE_SUM
             else -> TYPE_RECORD
         }
     }

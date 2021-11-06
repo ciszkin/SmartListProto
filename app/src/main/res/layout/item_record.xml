@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
 
         <import type="by.cisza.smartlistproto.utils.ExtensionsKt"/>
 
@@ -32,6 +33,7 @@
             android:layout_marginVertical="@dimen/margin_half"
             app:cardElevation="@dimen/elevation"
             android:onClick="@{onItemClick}"
+            android:backgroundTint="@{item.quantityLeft == 0.0 ? @color/grey : @color/white}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +49,7 @@
                     android:layout_height="32dp"
                     android:layout_marginStart="@dimen/margin_half"
                     android:onClick="@{onDoneClick}"
+                    android:checked="@{item.quantityLeft == 0.0}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -68,7 +71,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_half"
-                    android:text='@{String.valueOf(item.quantity - item.completedQuantity).concat(" x ").concat(String.valueOf(item.price)).concat(item.currency)}'
+                    android:text='@{String.valueOf(item.quantityLeft).concat(" x ").concat(String.valueOf(item.price)).concat(item.currency)}'
+                    android:visibility="@{item.quantityLeft == 0.0 ? View.INVISIBLE : View.VISIBLE}"
                     android:textStyle="italic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -96,6 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_half"
                     android:text="@{ExtensionsKt.toAmount(item.sum, item.currency)}"
+                    android:visibility="@{item.quantityLeft == 0.0 ? View.INVISIBLE : View.VISIBLE}"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"

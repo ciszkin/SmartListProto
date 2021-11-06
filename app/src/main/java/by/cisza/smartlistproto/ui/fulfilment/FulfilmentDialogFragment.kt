@@ -51,10 +51,16 @@ class FulfilmentDialogFragment(fragment: Fragment, private val record: SmartReco
         with(binding) {
             viewModel.currentRecord = record
             item = record
+            fulfilQuantity.editText?.setOnClickListener {
+                fulfilQuantity.editText?.selectAll()
+            }
             quantityTextWatcher = object : TextWatcherImpl() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     viewModel.quantity = s.toString().toDoubleOrNull() ?: 0.0
                 }
+            }
+            fulfilPrice.editText?.setOnClickListener {
+                fulfilPrice.editText?.selectAll()
             }
             priceTextWatcher = object : TextWatcherImpl() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -68,6 +74,7 @@ class FulfilmentDialogFragment(fragment: Fragment, private val record: SmartReco
                 }
             }
             onCancelClick = View.OnClickListener {
+                listener.onDialogResult(viewModel.returnRecord())
                 dismiss()
             }
         }

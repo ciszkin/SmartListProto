@@ -10,7 +10,7 @@ data class SmartRecord(
     val id: Long,
     val title: String,
     val description: String? = null,
-    val quantity: Double,
+    val quantity: Double = 0.0,
     val completedQuantity: Double = 0.0,
     val price: Double,
     val currency: String,
