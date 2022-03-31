@@ -47,25 +47,15 @@ class FulfilmentDialogFragment(fragment: Fragment, private val record: SmartReco
     ): View {
         binding = DialogFulfilmentBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(FulfilmentDialogViewModel::class.java)
+        viewModel.currentRecord = record
 
         with(binding) {
-            viewModel.currentRecord = record
-            item = record
-            fulfilQuantity.editText?.setOnClickListener {
+            model = viewModel
+            fulfilQuantity.setOnClickListener {
                 fulfilQuantity.editText?.selectAll()
             }
-            quantityTextWatcher = object : TextWatcherImpl() {
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    viewModel.quantity = s.toString().toDoubleOrNull() ?: 0.0
-                }
-            }
-            fulfilPrice.editText?.setOnClickListener {
+            fulfilPrice.setOnClickListener {
                 fulfilPrice.editText?.selectAll()
-            }
-            priceTextWatcher = object : TextWatcherImpl() {
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    viewModel.price = s.toString().toDoubleOrNull() ?: 0.0
-                }
             }
             onFulfilClick = View.OnClickListener {
                 if (viewModel.validate()) {
@@ -80,19 +70,6 @@ class FulfilmentDialogFragment(fragment: Fragment, private val record: SmartReco
         }
 
         return binding.root
-    }
-
-//    fun setRecord(record: SmartRecord) {
-//        viewModel.currentRecord = record
-//        with(binding) {
-//            item = record
-//        }
-//    }
-
-    open class TextWatcherImpl : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {}
     }
 
 }

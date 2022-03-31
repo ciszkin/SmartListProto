@@ -6,16 +6,8 @@
     <data>
 
         <variable
-            name="item"
-            type="by.cisza.smartlistproto.domain.SmartRecord" />
-
-        <variable
-            name="quantityTextWatcher"
-            type="android.text.TextWatcher" />
-
-        <variable
-            name="priceTextWatcher"
-            type="android.text.TextWatcher" />
+            name="model"
+            type="by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogViewModel" />
 
         <variable
             name="onFulfilClick"
@@ -37,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_regular"
             android:layout_marginTop="@dimen/margin_regular"
-            android:text="@{item.title}"
+            android:text="@{model.currentRecord.title}"
             android:textAlignment="textStart"
             android:textSize="@dimen/text_large"
             android:textStyle="bold"
@@ -52,6 +44,7 @@
             android:layout_marginEnd="@dimen/margin_regular"
             android:textSize="@dimen/text_extra_large"
             android:textStyle="bold"
+            android:text="@{String.valueOf(model.totalSum)}"
             app:layout_constraintBottom_toBottomOf="@+id/fulfil_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/fulfil_label"
@@ -62,28 +55,29 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_regular"
             android:layout_marginHorizontal="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_regular"
             android:hint="@string/new_record_quantity"
             app:layout_constraintEnd_toStartOf="@id/fulfil_price"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fulfil_label">
 
             <com.google.android.material.textfield.TextInputEditText
-                textWatcher="@{quantityTextWatcher}"
+                android:onTextChanged="@{model.onQuantityChanged}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(item.quantityLeft)}"
                 android:digits="@string/digits"
                 android:inputType="numberDecimal"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="@{String.valueOf(model.currentRecord.quantityLeft)}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fulfil_price"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_regular"
             android:layout_marginEnd="@dimen/margin_regular"
@@ -93,13 +87,13 @@
             app:layout_constraintTop_toBottomOf="@+id/fulfil_label">
 
             <com.google.android.material.textfield.TextInputEditText
-                textWatcher="@{priceTextWatcher}"
+                android:onTextChanged="@{model.onPriceChanged}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(item.price)}"
                 android:digits="@string/digits"
                 android:inputType="numberDecimal"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="@{String.valueOf(model.currentRecord.price)}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,13 +115,13 @@
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cancel_new_record_button"
-            android:textAllCaps="false"
             android:layout_marginHorizontal="@dimen/margin_double"
             android:layout_marginTop="@dimen/margin_double"
+            android:onClick="@{onCancelClick}"
+            android:text="@string/cancel_new_record_button"
+            android:textAllCaps="false"
             app:layout_constraintEnd_toStartOf="@+id/fulfil_button"
-            app:layout_constraintTop_toBottomOf="@+id/fulfil_quantity"
-            android:onClick="@{onCancelClick}"/>
+            app:layout_constraintTop_toBottomOf="@+id/fulfil_quantity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

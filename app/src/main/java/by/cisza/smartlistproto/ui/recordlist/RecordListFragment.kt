@@ -120,6 +120,7 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
         if (receiptItem.quantity == 0.0) updateList(viewModel.records.value)
     }
 
+    @ExperimentalCoroutinesApi
     private fun updateList(newList: List<SmartRecord>) {
         if (binding != null) {
             with(binding) {
@@ -150,7 +151,6 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
                     )
                     receiptList.layoutManager = LinearLayoutManager(context)
                     receiptList.hasFixedSize()
-
                 }
             }
         }

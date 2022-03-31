@@ -3,22 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
-            name="titleTextWatcher"
-            type="android.text.TextWatcher" />
-
-        <variable
-            name="descriptionTextWatcher"
-            type="android.text.TextWatcher" />
-
-        <variable
-            name="quantityTextWatcher"
-            type="android.text.TextWatcher" />
-
-        <variable
-            name="priceTextWatcher"
-            type="android.text.TextWatcher" />
+            name="model"
+            type="by.cisza.smartlistproto.ui.record.RecordDialogViewModel" />
 
         <variable
             name="onCreateClick"
@@ -28,9 +15,9 @@
             name="onCancelClick"
             type="android.view.View.OnClickListener" />
 
-        <variable
-            name="titleError"
-            type="Boolean" />
+<!--        <variable-->
+<!--            name="titleError"-->
+<!--            type="Boolean" />-->
 
     </data>
 
@@ -61,7 +48,7 @@
             android:layout_marginHorizontal="@dimen/margin_regular"
             android:layout_marginTop="@dimen/margin_double"
             android:hint="@string/new_record_title"
-            app:errorEnabled="@{titleError}"
+            app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/new_record_label">
@@ -70,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                textWatcher="@{titleTextWatcher}"
+                android:onTextChanged="@{model.onTitleChanged}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -91,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                textWatcher="@{descriptionTextWatcher}"/>
+                android:onTextChanged="@{model.onDescriptionChanged}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +100,7 @@
                 android:inputType="numberDecimal"
                 android:digits="@string/digits"
                 android:singleLine="true"
-                textWatcher="@{quantityTextWatcher}"/>
+                android:onTextChanged="@{model.onQuantityChanged}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +122,7 @@
                 android:inputType="numberDecimal"
                 android:digits="@string/digits"
                 android:singleLine="true"
-                textWatcher="@{priceTextWatcher}"/>
+                android:onTextChanged="@{model.onPriceChanged}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
