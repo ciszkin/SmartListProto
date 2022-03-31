@@ -3,23 +3,22 @@ package by.cisza.smartlistproto.ui.recordlist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import by.cisza.smartlistproto.databinding.ItemRecordBinding
 import by.cisza.smartlistproto.databinding.ItemSumBinding
 import by.cisza.smartlistproto.domain.SmartRecord
-import by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogFragment
 import by.cisza.smartlistproto.utils.round
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SmartRecordAdapter(
-    private val fragment: Fragment,
     source: List<SmartRecord>,
     private val recordController: RecordController,
 ) : RecyclerView.Adapter<SmartRecordAdapter.ViewHolder>() {
 
     interface RecordController {
         fun restoreRecord(record: SmartRecord)
+        fun fulfilRecord(item: SmartRecord)
+        fun addRecord()
     }
 
     companion object {
@@ -79,7 +78,7 @@ class SmartRecordAdapter(
                 onDoneClick =
                     View.OnClickListener { view ->
                         if (item.quantityLeft > 0.0) {
-                            fragment.showFulfilDialog(item)
+                            recordController.fulfilRecord(item)
                         } else {
                             isDone.isChecked = false
                             recordController.restoreRecord(item)
@@ -96,10 +95,6 @@ class SmartRecordAdapter(
             .setMessage(record.description)
             .setNeutralButton("OK", null)
             .show()
-    }
-
-    private fun Fragment.showFulfilDialog(record: SmartRecord) {
-        FulfilmentDialogFragment(this, record).show(childFragmentManager, "fulfilmentDialog")
     }
 
     inner class SumViewHolder(private val binding: ItemSumBinding) : ViewHolder(binding.root) {

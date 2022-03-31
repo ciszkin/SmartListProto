@@ -6,14 +6,16 @@
     <data>
         <import type="android.view.View"/>
         <variable
-            name="onFabClick"
-            type="android.view.View.OnClickListener" />
+            name="state"
+            type="by.cisza.smartlistproto.ui.recordlist.RecordListViewState" />
+
         <variable
-            name="totalSum"
-            type="String" />
-        <variable
-            name="receiptVisible"
-            type="Boolean" />
+            name="recordController"
+            type="by.cisza.smartlistproto.ui.recordlist.SmartRecordAdapter.RecordController" />
+
+<!--        <variable-->
+<!--            name="onFabClick"-->
+<!--            type="android.view.View.OnClickListener" />-->
 
     </data>
 
@@ -41,6 +43,8 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            recordController="@{recordController}"
+            recordSource="@{state.records}"
             android:layout_marginTop="@dimen/margin_top_recycler"
             android:layout_marginBottom="@dimen/margin_double"/>
 
@@ -50,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
             android:contentDescription="@null"
-            android:onClick="@{onFabClick}"
+            android:onClick="@{() -> recordController.addRecord()}"
             app:layout_anchor="@id/bottom_sheet_receipt"
             app:layout_anchorGravity="top|end"
             app:srcCompat="@drawable/ic_add" />
@@ -62,7 +66,7 @@
             android:background="@drawable/bottom_sheet_shape"
             android:paddingBottom="@dimen/margin_double"
             app:behavior_peekHeight="@dimen/bottomSheetHeight"
-            android:visibility="@{receiptVisible ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{state.isReceiptVisible ? View.VISIBLE : View.INVISIBLE}"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <ImageView
@@ -92,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_double"
-                android:text="@{totalSum}"
+                android:text="@{String.valueOf(state.totalSum)}"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/total_sum_label"
                 app:layout_constraintStart_toEndOf="@+id/total_sum_label"
@@ -104,6 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/total_sum_label"
+                receiptSource="@{state.receiptItems}"
                 android:layout_marginTop="@dimen/margin_regular"
                 android:layout_marginBottom="@dimen/margin_double"/>
 

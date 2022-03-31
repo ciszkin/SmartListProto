@@ -26,7 +26,7 @@ class RecordDialogFragment(private val listener: RecordDialogListener): DialogFr
     private val viewModel: RecordDialogViewModel by lazy { ViewModelProvider(this).get(RecordDialogViewModel::class.java) }
 
     interface RecordDialogListener {
-        fun onDialogResult(record: SmartRecord)
+        fun onDialogResult(record: SmartRecord?)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +60,7 @@ class RecordDialogFragment(private val listener: RecordDialogListener): DialogFr
             }
 
             onCancelClick = View.OnClickListener {
+                listener.onDialogResult(null)
                 dismiss()
             }
 

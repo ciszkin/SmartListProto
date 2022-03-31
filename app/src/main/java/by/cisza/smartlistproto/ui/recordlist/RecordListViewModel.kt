@@ -1,47 +1,52 @@
 package by.cisza.smartlistproto.ui.recordlist
 
 import androidx.lifecycle.ViewModel
-import by.cisza.smartlistproto.domain.Receipt
 import by.cisza.smartlistproto.domain.Receipt.ReceiptItem
 import by.cisza.smartlistproto.domain.SmartRecord
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import by.cisza.smartlistproto.utils.round
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-@ExperimentalCoroutinesApi
 class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
 
-    private val _records = MutableStateFlow(listOf<SmartRecord>())
-    val records: StateFlow<List<SmartRecord>>
-        get() = _records
+    private val _viewState = MutableStateFlow(RecordListViewState())
+    val viewState: StateFlow<RecordListViewState>
+        get() = _viewState
 
-    private var _receiptItems = MutableStateFlow(listOf<ReceiptItem>())
-    val receiptItems: StateFlow<List<ReceiptItem>>
-        get() = _receiptItems
-
-    fun addRecord(record: SmartRecord) {
-
-        val newList = mutableListOf<SmartRecord>()
-        newList.addAll(records.value)
-        newList.add(record)
-        _records.value = newList
+    fun addRecord(record: SmartRecord?) {
+        if (record != null) {
+            _viewState.value = _viewState.value.let {
+                val newList = mutableListOf<SmartRecord>()
+                newList.addAll(it.records)
+                newList.add(record)
+                it.copy(records = newList, showNewRecordDialog = false)
+            }
+        } else {
+            _viewState.value = _viewState.value.copy(showNewRecordDialog = false)
+        }
     }
 
     fun removeRecord(record: SmartRecord) {
-        val newList = mutableListOf<SmartRecord>()
-        newList.addAll(records.value)
-        newList.remove(record)
-        _records.value = newList
+        _viewState.value = _viewState.value.let {
+            val newList = mutableListOf<SmartRecord>()
+            newList.addAll(it.records)
+            newList.remove(record)
+            it.copy(records = newList)
+        }
     }
 
     fun fulfilRecord(receiptItem: ReceiptItem) {
 
-        val record = records.value.find {
+        val record = _viewState.value.records.find {
             it.id == receiptItem.recordId
         }
 
-        if (record != null) {
-            _records.value = _records.value.map {
+        val item = _viewState.value.receiptItems.find {
+            it.recordId == receiptItem.recordId && it.price == receiptItem.price
+        }
+
+        val newRecords = if (record != null) {
+            _viewState.value.records.map {
                 if (it == record) {
                     val newCompletedQuantity = it.completedQuantity + receiptItem.quantity
                     when {
@@ -49,7 +54,10 @@ class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
                             it.copy(completedQuantity = newCompletedQuantity)
                         }
                         newCompletedQuantity > it.quantity -> {
-                            it.copy(completedQuantity = newCompletedQuantity, quantity = newCompletedQuantity)
+                            it.copy(
+                                completedQuantity = newCompletedQuantity,
+                                quantity = newCompletedQuantity
+                            )
                         }
                         else -> {
                             it.copy()
@@ -57,29 +65,37 @@ class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
                     }
                 } else it
             }
-        }
+        } else _viewState.value.records
 
-        val item = receiptItems.value.find {
-            it.recordId == receiptItem.recordId && it.price == receiptItem.price
-        }
+        val newReceiptItems = viewState.value.receiptItems.map {
+            if (it == item) it.copy(quantity = it.quantity + receiptItem.quantity) else it
+        } as MutableList
 
-        if (item != null) {
-            _receiptItems.value = _receiptItems.value.map {
-                if (it == item) it.copy(quantity = it.quantity + receiptItem.quantity) else it
-            }
-        } else {
-            val newItems = mutableListOf<ReceiptItem>()
-            newItems.addAll(receiptItems.value)
-            newItems.add(receiptItem)
-            _receiptItems.value = newItems
-        }
+        if (newReceiptItems.find {it.recordId == receiptItem.recordId && it.price == receiptItem.price} == null) newReceiptItems.add(receiptItem)
+
+        _viewState.value = _viewState.value.copy(
+            records = newRecords,
+            receiptItems = newReceiptItems,
+            totalSum = newReceiptItems.sumOf { it.sum }.round(2),
+            itemToFulfil = null
+        )
 
     }
 
     override fun restoreRecord(record: SmartRecord) {
-        _records.value = _records.value.map {
-            if (it == record) it.copy(completedQuantity = 0.0) else it
+        _viewState.value.apply {
+            _viewState.value = this.copy(records = this.records.map {
+                if (it == record) it.copy(completedQuantity = 0.0) else it
+            })
         }
+    }
+
+    override fun fulfilRecord(item: SmartRecord) {
+        _viewState.value = _viewState.value.copy(itemToFulfil = item)
+    }
+
+    override fun addRecord() {
+        _viewState.value = _viewState.value.copy(showNewRecordDialog = true)
     }
 
 }
