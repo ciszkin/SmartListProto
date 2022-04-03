@@ -16,13 +16,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.cisza.smartlistproto.databinding.DialogRecordBinding
 import by.cisza.smartlistproto.domain.SmartRecord
+import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.ClassCastException
 
 class RecordDialogFragment(private val listener: RecordDialogListener): DialogFragment() {
 
-    private var binding: DialogRecordBinding? = null
+    private val binding: DialogRecordBinding by viewBinding(DialogRecordBinding::bind)
     private val viewModel: RecordDialogViewModel by lazy { ViewModelProvider(this).get(RecordDialogViewModel::class.java) }
 
     interface RecordDialogListener {
@@ -40,18 +41,17 @@ class RecordDialogFragment(private val listener: RecordDialogListener): DialogFr
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DialogRecordBinding.inflate(inflater)
+//        binding = DialogRecordBinding.inflate(inflater)
 
         binding?.apply {
             model = viewModel
 
-            onCreateClick = View.OnClickListener {
-                viewModel.validate()
-                if (viewModel.validate()) {
-                    listener.onDialogResult(viewModel.createRecord())
-                    dismiss()
-                }
-            }
+//            onCreateClick = View.OnClickListener {
+//                if (viewModel.validate()) {
+//                    listener.onDialogResult(viewModel.createRecord())
+//                    dismiss()
+//                }
+//            }
             newRecordQuantity.editText?.setText(viewModel.viewState.value.quantity.toString())
             newRecordQuantity.editText?.apply {
                 setOnClickListener {
@@ -59,19 +59,28 @@ class RecordDialogFragment(private val listener: RecordDialogListener): DialogFr
                 }
             }
 
-            onCancelClick = View.OnClickListener {
-                listener.onDialogResult(null)
-                dismiss()
-            }
+//            onCancelClick = View.OnClickListener {
+//                listener.onDialogResult(null)
+//                dismiss()
+//            }
 
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.viewState.collect { state ->
-                        if (state.titleErrorRes != 0) {
-                            newRecordTitle.isErrorEnabled = true
-                            newRecordTitle.error = getString(state.titleErrorRes)
-                        } else {
-                            newRecordTitle.isErrorEnabled = false
+                        binding?.state = state
+//                        if (state.titleErrorRes != 0) {
+//                            newRecordTitle.isErrorEnabled = true
+//                            newRecordTitle.error = getString(state.titleErrorRes)
+//                        } else {
+//                            newRecordTitle.isErrorEnabled = false
+//                        }
+                        if (state.cancelDialog) {
+                            listener.onDialogResult(null)
+                            dismiss()
+                        }
+                        if (state.createdRecord != null) {
+                            listener.onDialogResult(viewModel.createRecord())
+                            dismiss()
                         }
                     }
                 }

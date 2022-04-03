@@ -9,6 +9,7 @@ import by.cisza.smartlistproto.domain.Receipt
 import by.cisza.smartlistproto.domain.SmartRecord
 import by.cisza.smartlistproto.ui.recordlist.ReceiptItemsAdapter
 import by.cisza.smartlistproto.ui.recordlist.SmartRecordAdapter
+import com.google.android.material.textfield.TextInputLayout
 
 @BindingAdapter("textWatcher")
 fun setTextWatcher(view: EditText, textWatcher: TextWatcher) {
@@ -38,4 +39,9 @@ fun RecyclerView.updateSmartList(recordController: SmartRecordAdapter.RecordCont
         hasFixedSize()
     }
 
+}
+
+@BindingAdapter("errorText")
+fun TextInputLayout.errorText(errorRes: Int) {
+    if (errorRes != 0) error = this.context.getString(errorRes)
 }

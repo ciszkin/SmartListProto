@@ -8,16 +8,8 @@
             type="by.cisza.smartlistproto.ui.record.RecordDialogViewModel" />
 
         <variable
-            name="onCreateClick"
-            type="android.view.View.OnClickListener" />
-
-        <variable
-            name="onCancelClick"
-            type="android.view.View.OnClickListener" />
-
-<!--        <variable-->
-<!--            name="titleError"-->
-<!--            type="Boolean" />-->
+            name="state"
+            type="by.cisza.smartlistproto.ui.record.RecordDialogViewState" />
 
     </data>
 
@@ -48,7 +40,8 @@
             android:layout_marginHorizontal="@dimen/margin_regular"
             android:layout_marginTop="@dimen/margin_double"
             android:hint="@string/new_record_title"
-            app:errorEnabled="true"
+            app:errorEnabled="@{state.showError}"
+            errorText="@{state.titleErrorRes}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/new_record_label">
@@ -133,7 +126,7 @@
             android:layout_marginHorizontal="@dimen/margin_regular"
             android:layout_marginTop="@dimen/margin_double"
             android:layout_marginBottom="@dimen/margin_regular"
-            android:onClick="@{onCreateClick}"
+            android:onClick="@{() -> model.onCreateClick()}"
             android:text="@string/create_new_record_button"
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -150,7 +143,7 @@
             android:layout_marginTop="@dimen/margin_double"
             app:layout_constraintEnd_toStartOf="@+id/create_button"
             app:layout_constraintTop_toBottomOf="@+id/new_record_quantity"
-            android:onClick="@{onCancelClick}"/>
+            android:onClick="@{() -> model.onCancelClick()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

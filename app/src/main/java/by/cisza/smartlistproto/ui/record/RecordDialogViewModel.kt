@@ -43,11 +43,28 @@ class RecordDialogViewModel : ViewModel() {
         _viewState.value = _viewState.value.copy(price = s.toString().toDoubleOrNull() ?: 0.0)
     }
 
-    fun validate() : Boolean {
-        _viewState.value = _viewState.value.let {
-            it.copy(titleErrorRes = if (it.title.isEmpty() || it.title.isBlank()) R.string.empty_tytle_error else 0)
+//    fun validate() : Boolean {
+//        _viewState.value = _viewState.value.let {
+//            it.copy(titleErrorRes = if (it.title.isEmpty() || it.title.isBlank()) R.string.empty_tytle_error else 0)
+//        }
+//
+//            return _viewState.value.titleErrorRes == 0
+//    }
+
+    fun onCreateClick() {
+        val errorRes = _viewState.value.let {
+            if (it.title.isEmpty() || it.title.isBlank()) R.string.empty_tytle_error else 0
         }
 
-            return _viewState.value.titleErrorRes == 0
+        if (errorRes == 0) {
+            _viewState.value = _viewState.value.copy(titleErrorRes = errorRes, createdRecord = createRecord())
+        } else {
+            _viewState.value = _viewState.value.copy(titleErrorRes = errorRes)
+        }
+
+    }
+    
+    fun onCancelClick() {
+        _viewState.value = _viewState.value.copy(cancelDialog = true)
     }
 }
