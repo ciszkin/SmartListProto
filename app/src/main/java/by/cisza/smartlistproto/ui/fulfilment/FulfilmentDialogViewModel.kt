@@ -3,58 +3,60 @@ package by.cisza.smartlistproto.ui.fulfilment
 import androidx.lifecycle.ViewModel
 import by.cisza.smartlistproto.domain.Receipt.*
 import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.ui.record.RecordDialogViewState
 import by.cisza.smartlistproto.utils.round
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-class FulfilmentDialogViewModel: ViewModel() {
+class FulfilmentDialogViewModel : ViewModel() {
 
-    var quantity: Double = 0.0
-    var price: Double = 0.0
+    private val _viewState = MutableStateFlow(FulfilmentDialogViewState())
+    val viewState: StateFlow<FulfilmentDialogViewState>
+        get() = _viewState
 
-    val totalSum = (quantity * price).round(2)
-
-    var currentRecord: SmartRecord = SmartRecord(
-        id = 0L,
-        title = "",
-        price = 0.0,
-        currency = ""
-    )
-    set(value) {
-        quantity = value.quantityLeft
-        price = value.price
-        field = value
+    fun setCurrentRecord(record: SmartRecord) {
+        _viewState.value = _viewState.value.copy(
+            currentRecord = record,
+            quantity = record.quantityLeft,
+            price = record.price
+        )
     }
 
-     fun onQuantityChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            quantity = s.toString().toDoubleOrNull() ?: 0.0
-        }
+    fun onQuantityChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        _viewState.value = _viewState.value.copy(quantity = s.toString().toDoubleOrNull() ?: 0.0)
+    }
 
 
     fun onPriceChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            price = s.toString().toDoubleOrNull() ?: 0.0
+        _viewState.value = _viewState.value.copy(price = s.toString().toDoubleOrNull() ?: 0.0)
+    }
+
+
+    fun fulfilRecord() {
+        _viewState.value = _viewState.value.let {
+            it.copy(
+                receiptItem = ReceiptItem(
+                    recordId = it.currentRecord.id,
+                    title = it.currentRecord.title,
+                    quantity = it.quantity,
+                    price = it.price,
+                    currency = it.currentRecord.currency
+                )
+            )
         }
-
-
-    fun fulfilRecord() : ReceiptItem {
-        return ReceiptItem(
-            recordId = currentRecord.id,
-            title = currentRecord.title,
-            quantity = quantity,
-            price = price,
-            currency = currentRecord.currency
-        )
     }
 
-    fun returnRecord() : ReceiptItem {
-        return ReceiptItem(
-            recordId = currentRecord.id,
-            title = currentRecord.title,
-            quantity = 0.0,
-            price = currentRecord.price,
-            currency = currentRecord.currency
-        )
-    }
-
-    fun validate() : Boolean {
-        return currentRecord != null
+    fun returnRecord() {
+        _viewState.value = _viewState.value.let {
+            it.copy(
+                receiptItem = ReceiptItem(
+                    recordId = it.currentRecord.id,
+                    title = it.currentRecord.title,
+                    quantity = 0.0,
+                    price = it.currentRecord.price,
+                    currency = it.currentRecord.currency
+                )
+            )
+        }
     }
 }

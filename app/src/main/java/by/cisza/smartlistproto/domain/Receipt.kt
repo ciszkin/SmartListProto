@@ -12,6 +12,11 @@ data class Receipt(
     val items: List<ReceiptItem>
 ): Parcelable {
 
+    @IgnoredOnParcel
+    val sum = items.sumOf {
+        it.sum
+    }
+
     @Parcelize
     data class ReceiptItem(
         val recordId: Long,

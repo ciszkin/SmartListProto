@@ -10,12 +10,9 @@
             type="by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogViewModel" />
 
         <variable
-            name="onFulfilClick"
-            type="android.view.View.OnClickListener" />
+            name="state"
+            type="by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogViewState" />
 
-        <variable
-            name="onCancelClick"
-            type="android.view.View.OnClickListener" />
 
     </data>
 
@@ -29,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_regular"
             android:layout_marginTop="@dimen/margin_regular"
-            android:text="@{model.currentRecord.title}"
+            android:text="@{state.currentRecord.title}"
             android:textAlignment="textStart"
             android:textSize="@dimen/text_large"
             android:textStyle="bold"
@@ -44,7 +41,7 @@
             android:layout_marginEnd="@dimen/margin_regular"
             android:textSize="@dimen/text_extra_large"
             android:textStyle="bold"
-            android:text="@{String.valueOf(model.totalSum)}"
+            android:text="@{String.valueOf(state.totalSum)}"
             app:layout_constraintBottom_toBottomOf="@+id/fulfil_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/fulfil_label"
@@ -69,8 +66,7 @@
                 android:layout_height="wrap_content"
                 android:digits="@string/digits"
                 android:inputType="numberDecimal"
-                android:singleLine="true"
-                android:text="@{String.valueOf(model.currentRecord.quantityLeft)}" />
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,8 +88,7 @@
                 android:layout_height="wrap_content"
                 android:digits="@string/digits"
                 android:inputType="numberDecimal"
-                android:singleLine="true"
-                android:text="@{String.valueOf(model.currentRecord.price)}" />
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,7 +99,7 @@
             android:layout_marginHorizontal="@dimen/margin_regular"
             android:layout_marginTop="@dimen/margin_double"
             android:layout_marginBottom="@dimen/margin_regular"
-            android:onClick="@{onFulfilClick}"
+            android:onClick="@{() -> model.fulfilRecord()}"
             android:text="@string/fulfil_button"
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -117,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_double"
             android:layout_marginTop="@dimen/margin_double"
-            android:onClick="@{onCancelClick}"
+            android:onClick="@{() -> model.returnRecord()}"
             android:text="@string/cancel_new_record_button"
             android:textAllCaps="false"
             app:layout_constraintEnd_toStartOf="@+id/fulfil_button"

@@ -93,15 +93,18 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
         if (binding != null) with(binding) {
             this!!.state = state
             recordController = viewModel
-            state.itemToFulfil?.let { showFulfilDialog(it) }
-            if (state.showNewRecordDialog) RecordDialogFragment(this@RecordListFragment).show(
-                childFragmentManager,
-                "NewRecordDialog"
-            )
+            state.itemToFulfil?.let {
+                FulfilmentDialogFragment(
+                    this@RecordListFragment  as FulfilmentDialogFragment.FulfilmentDialogListener,
+                    it
+                ).show(childFragmentManager, "fulfilmentDialog")
+            }
+            if (state.showNewRecordDialog)
+                RecordDialogFragment(this@RecordListFragment).show(
+                    childFragmentManager,
+                    "NewRecordDialog"
+                )
         }
     }
 
-    private fun Fragment.showFulfilDialog(record: SmartRecord) {
-        FulfilmentDialogFragment(this, record).show(childFragmentManager, "fulfilmentDialog")
-    }
 }

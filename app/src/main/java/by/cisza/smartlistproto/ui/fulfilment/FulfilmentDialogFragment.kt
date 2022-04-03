@@ -1,33 +1,32 @@
 package by.cisza.smartlistproto.ui.fulfilment
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import by.cisza.smartlistproto.databinding.DialogFulfilmentBinding
-import by.cisza.smartlistproto.domain.Receipt
 import by.cisza.smartlistproto.domain.Receipt.*
 import by.cisza.smartlistproto.domain.SmartRecord
-import java.lang.ClassCastException
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class FulfilmentDialogFragment(fragment: Fragment, private val record: SmartRecord): DialogFragment() {
+class FulfilmentDialogFragment(
+    private val listener: FulfilmentDialogListener,
+    private val record: SmartRecord
+) : DialogFragment() {
 
-    private lateinit var listener: FulfilmentDialogListener
-    private lateinit var binding: DialogFulfilmentBinding
-    private lateinit var viewModel: FulfilmentDialogViewModel
+    private var _binding: DialogFulfilmentBinding? = null
+    private val binding get() = _binding
 
-    init {
-        try {
-            listener = fragment as FulfilmentDialogListener
-        } catch (e: ClassCastException) {
-            Toast.makeText(context, "${context.toString()} must implement DialogListener!", Toast.LENGTH_SHORT).show()
-        }
+    private val viewModel: FulfilmentDialogViewModel by lazy {
+        ViewModelProvider(this).get(
+            FulfilmentDialogViewModel::class.java
+        )
     }
 
     interface FulfilmentDialogListener {
@@ -45,11 +44,10 @@ class FulfilmentDialogFragment(fragment: Fragment, private val record: SmartReco
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DialogFulfilmentBinding.inflate(inflater)
-        viewModel = ViewModelProvider(this).get(FulfilmentDialogViewModel::class.java)
-        viewModel.currentRecord = record
+        _binding = DialogFulfilmentBinding.inflate(inflater)
+        viewModel.setCurrentRecord(record)
 
-        with(binding) {
+        binding?.apply {
             model = viewModel
             fulfilQuantity.setOnClickListener {
                 fulfilQuantity.editText?.selectAll()
@@ -57,19 +55,28 @@ class FulfilmentDialogFragment(fragment: Fragment, private val record: SmartReco
             fulfilPrice.setOnClickListener {
                 fulfilPrice.editText?.selectAll()
             }
-            onFulfilClick = View.OnClickListener {
-                if (viewModel.validate()) {
-                    listener.onDialogResult(viewModel.fulfilRecord())
-                    dismiss()
+            fulfilQuantity.editText?.setText(record.quantity.toString())
+            fulfilPrice.editText?.setText(record.price.toString())
+
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.viewState.collect { state ->
+                        binding?.state = state
+                        state.receiptItem?.let {
+                            listener.onDialogResult(it)
+                            dismiss()
+                        }
+                    }
                 }
-            }
-            onCancelClick = View.OnClickListener {
-                listener.onDialogResult(viewModel.returnRecord())
-                dismiss()
             }
         }
 
-        return binding.root
+        return binding!!.root
     }
 
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
