@@ -1,10 +1,8 @@
 package by.cisza.smartlistproto.ui.fulfilment
 
 import androidx.lifecycle.ViewModel
-import by.cisza.smartlistproto.domain.Receipt.*
-import by.cisza.smartlistproto.domain.SmartRecord
-import by.cisza.smartlistproto.ui.record.RecordDialogViewState
-import by.cisza.smartlistproto.utils.round
+import by.cisza.smartlistproto.model.ReceiptItem
+import by.cisza.smartlistproto.model.SmartRecord
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

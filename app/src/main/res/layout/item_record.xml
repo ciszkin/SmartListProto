@@ -10,7 +10,7 @@
 
         <variable
             name="item"
-            type="by.cisza.smartlistproto.domain.SmartRecord" />
+            type="by.cisza.smartlistproto.model.SmartRecord" />
 
         <variable
             name="onItemClick"

@@ -9,7 +9,7 @@
 
         <variable
             name="item"
-            type="by.cisza.smartlistproto.domain.Receipt.ReceiptItem" />
+            type="by.cisza.smartlistproto.model.ReceiptItem" />
 
         <variable
             name="onItemClick"

@@ -1,7 +1,7 @@
 package by.cisza.smartlistproto.ui.fulfilment
 
-import by.cisza.smartlistproto.domain.Receipt
-import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.model.ReceiptItem
+import by.cisza.smartlistproto.model.SmartRecord
 import by.cisza.smartlistproto.utils.round
 
 data class FulfilmentDialogViewState(
@@ -13,7 +13,7 @@ data class FulfilmentDialogViewState(
         price = 0.0,
         currency = ""
     ),
-    val receiptItem: Receipt.ReceiptItem? = null
+    val receiptItem: ReceiptItem? = null
 ) {
     val totalSum = (quantity * price).round(2)
 }

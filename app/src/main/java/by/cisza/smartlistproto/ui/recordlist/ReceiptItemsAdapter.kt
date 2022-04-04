@@ -5,9 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.cisza.smartlistproto.databinding.ItemReceiptRecordBinding
-import by.cisza.smartlistproto.domain.Receipt
-import by.cisza.smartlistproto.domain.Receipt.ReceiptItem
-import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.model.ReceiptItem
 
 class ReceiptItemsAdapter(
     source: List<ReceiptItem>,

@@ -5,8 +5,8 @@ import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import by.cisza.smartlistproto.domain.Receipt
-import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.model.ReceiptItem
+import by.cisza.smartlistproto.model.SmartRecord
 import by.cisza.smartlistproto.ui.recordlist.ReceiptItemsAdapter
 import by.cisza.smartlistproto.ui.recordlist.SmartRecordAdapter
 import com.google.android.material.textfield.TextInputLayout
@@ -17,7 +17,7 @@ fun setTextWatcher(view: EditText, textWatcher: TextWatcher) {
 }
 
 @BindingAdapter("receiptSource")
-fun RecyclerView.updateReceipt(source: List<Receipt.ReceiptItem>) {
+fun RecyclerView.updateReceipt(source: List<ReceiptItem>) {
     this.apply {
         adapter = ReceiptItemsAdapter(
             source = source

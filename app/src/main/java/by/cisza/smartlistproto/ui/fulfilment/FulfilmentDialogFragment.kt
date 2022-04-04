@@ -10,8 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.cisza.smartlistproto.databinding.DialogFulfilmentBinding
-import by.cisza.smartlistproto.domain.Receipt.*
-import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.model.Receipt.*
+import by.cisza.smartlistproto.model.ReceiptItem
+import by.cisza.smartlistproto.model.SmartRecord
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

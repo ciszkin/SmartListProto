@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.domain
+package by.cisza.smartlistproto.model
 
 import android.os.Parcelable
 import by.cisza.smartlistproto.utils.round

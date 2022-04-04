@@ -1,6 +1,6 @@
 package by.cisza.smartlistproto.ui.record
 
-import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.model.SmartRecord
 
 data class RecordDialogViewState(
     val currency: String = "BYN",

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.cisza.smartlistproto.databinding.ItemRecordBinding
 import by.cisza.smartlistproto.databinding.ItemSumBinding
-import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.model.SmartRecord
 import by.cisza.smartlistproto.utils.round
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 

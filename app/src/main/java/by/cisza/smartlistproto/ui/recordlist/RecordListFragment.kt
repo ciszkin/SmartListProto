@@ -1,7 +1,6 @@
 package by.cisza.smartlistproto.ui.recordlist
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.cisza.smartlistproto.databinding.FragmentRecordListBinding
-import by.cisza.smartlistproto.domain.Receipt.ReceiptItem
-import by.cisza.smartlistproto.domain.SmartRecord
+import by.cisza.smartlistproto.model.ReceiptItem
+import by.cisza.smartlistproto.model.SmartRecord
 import by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogFragment
 import by.cisza.smartlistproto.ui.record.RecordDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
