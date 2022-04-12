@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.model
+package by.cisza.smartlistproto.data.entities
 
 import android.os.Parcelable
 import kotlinx.parcelize.IgnoredOnParcel

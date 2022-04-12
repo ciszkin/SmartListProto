@@ -1,122 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <data>
+    <TextView
+        android:id="@+id/fulfil_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_regular"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:textAlignment="textStart"
+        android:textSize="@dimen/text_large"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/total_sum"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <variable
-            name="model"
-            type="by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogViewModel" />
+    <TextView
+        android:id="@+id/total_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_regular"
+        android:textSize="@dimen/text_extra_large"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/fulfil_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fulfil_label"
+        tools:text="7.35" />
 
-        <variable
-            name="state"
-            type="by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogViewState" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fulfil_quantity"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_regular"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:hint="@string/new_record_quantity"
+        app:layout_constraintEnd_toStartOf="@id/fulfil_price"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fulfil_label">
 
-
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/fulfil_label"
-            android:layout_width="0dp"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/quantity_edit_text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_regular"
-            android:layout_marginTop="@dimen/margin_regular"
-            android:text="@{state.currentRecord.title}"
-            android:textAlignment="textStart"
-            android:textSize="@dimen/text_large"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/total_sum"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:digits="@string/digits"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
 
-        <TextView
-            android:id="@+id/total_sum"
-            android:layout_width="wrap_content"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fulfil_price"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:layout_marginEnd="@dimen/margin_regular"
+        android:hint="@string/new_record_price"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fulfil_quantity"
+        app:layout_constraintTop_toBottomOf="@+id/fulfil_label">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/price_edit_text"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_regular"
-            android:textSize="@dimen/text_extra_large"
-            android:textStyle="bold"
-            android:text="@{String.valueOf(state.totalSum)}"
-            app:layout_constraintBottom_toBottomOf="@+id/fulfil_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fulfil_label"
-            tools:text="7.35" />
+            android:digits="@string/digits"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/fulfil_quantity"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_regular"
-            android:layout_marginTop="@dimen/margin_regular"
-            android:hint="@string/new_record_quantity"
-            app:layout_constraintEnd_toStartOf="@id/fulfil_price"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fulfil_label">
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:onTextChanged="@{model.onQuantityChanged}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:digits="@string/digits"
-                android:inputType="numberDecimal"
-                android:singleLine="true" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fulfil_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_regular"
+        android:layout_marginTop="@dimen/margin_double"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:text="@string/fulfil_button"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fulfil_quantity" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_double"
+        android:layout_marginTop="@dimen/margin_double"
+        android:text="@string/cancel_new_record_button"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@+id/fulfil_button"
+        app:layout_constraintTop_toBottomOf="@+id/fulfil_quantity" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/fulfil_price"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_regular"
-            android:layout_marginEnd="@dimen/margin_regular"
-            android:hint="@string/new_record_price"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fulfil_quantity"
-            app:layout_constraintTop_toBottomOf="@+id/fulfil_label">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:onTextChanged="@{model.onPriceChanged}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:digits="@string/digits"
-                android:inputType="numberDecimal"
-                android:singleLine="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/fulfil_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_regular"
-            android:layout_marginTop="@dimen/margin_double"
-            android:layout_marginBottom="@dimen/margin_regular"
-            android:onClick="@{() -> model.fulfilRecord()}"
-            android:text="@string/fulfil_button"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fulfil_quantity" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_double"
-            android:layout_marginTop="@dimen/margin_double"
-            android:onClick="@{() -> model.returnRecord()}"
-            android:text="@string/cancel_new_record_button"
-            android:textAllCaps="false"
-            app:layout_constraintEnd_toStartOf="@+id/fulfil_button"
-            app:layout_constraintTop_toBottomOf="@+id/fulfil_quantity" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

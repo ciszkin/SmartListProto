@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.databinding.ItemRecordBinding
 import by.cisza.smartlistproto.databinding.ItemSumBinding
-import by.cisza.smartlistproto.model.SmartRecord
+import by.cisza.smartlistproto.data.entities.SmartRecord
 import by.cisza.smartlistproto.utils.round
+import by.cisza.smartlistproto.utils.toAmount
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SmartRecordAdapter(
@@ -70,21 +72,31 @@ class SmartRecordAdapter(
     inner class RecordViewHolder(private val binding: ItemRecordBinding) :
         ViewHolder(binding.root) {
         override fun bind(item: Any) {
-            binding.apply {
-                this.item = item as SmartRecord
-                onItemClick = View.OnClickListener { view ->
+            if (item is SmartRecord) binding.apply {
+                itemCard.setOnClickListener{ view ->
                     view.showDescriptionDialog(item)
                 }
-                onDoneClick =
-                    View.OnClickListener { view ->
-                        if (item.quantityLeft > 0.0) {
-                            recordController.fulfilRecord(item)
-                        } else {
-                            isDone.isChecked = false
-                            recordController.restoreRecord(item)
-                        }
+
+                isDone.isChecked = item.quantityLeft == 0.0
+                isDone.setOnClickListener { view ->
+                    if (item.quantityLeft > 0.0) {
+                        recordController.fulfilRecord(item)
+                    } else {
+                        isDone.isChecked = false
+                        recordController.restoreRecord(item)
                     }
-                executePendingBindings()
+                }
+
+                recordName.text = item.title
+
+                val quantityAndPrice = "${item.quantityLeft} x ${item.price.toAmount(item.currency)}"
+                recordQuantityAndPrice.text = quantityAndPrice
+                recordQuantityAndPrice.visibility = if (item.quantityLeft == 0.0) View.INVISIBLE else View.VISIBLE
+
+                recordDescription.text = item.description
+
+                recordSum.text = item.sum.toAmount(item.currency)
+                recordSum.visibility = if (item.quantityLeft == 0.0) View.INVISIBLE else View.VISIBLE
             }
         }
     }
@@ -100,8 +112,7 @@ class SmartRecordAdapter(
     inner class SumViewHolder(private val binding: ItemSumBinding) : ViewHolder(binding.root) {
         override fun bind(item: Any) {
             binding.apply {
-                sum = (item as SmartRecord).sum.toString()
-                currency = item.currency
+                itemSumValue.text = (item as SmartRecord).sum.toAmount(item.currency)
             }
         }
 

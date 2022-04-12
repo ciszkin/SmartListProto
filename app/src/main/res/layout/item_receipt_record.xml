@@ -1,70 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <data>
+    <TextView
+        android:id="@+id/record_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_regular"
+        android:layout_marginVertical="@dimen/margin_half"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/record_quantity_and_price"
+        app:layout_constraintEnd_toStartOf="@+id/record_quantity_and_price"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/record_quantity_and_price"
+        tools:text="Name" />
 
-        <import type="by.cisza.smartlistproto.utils.ExtensionsKt" />
-
-        <variable
-            name="item"
-            type="by.cisza.smartlistproto.model.ReceiptItem" />
-
-        <variable
-            name="onItemClick"
-            type="android.view.View.OnClickListener" />
-
-        <variable
-            name="onDoneClick"
-            type="android.view.View.OnClickListener" />
-
-    </data>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/record_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/margin_half"
-            android:layout_marginHorizontal="@dimen/margin_regular"
-            android:text="@{item.title}"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/record_quantity_and_price"
-            app:layout_constraintEnd_toStartOf="@+id/record_quantity_and_price"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/record_quantity_and_price"
-            tools:text="Name" />
-
-        <TextView
-            android:id="@+id/record_quantity_and_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_half"
-            android:text='@{String.valueOf(item.quantity).concat(" x ").concat(String.valueOf(item.price)).concat(item.currency)}'
-            android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="@+id/record_sum"
-            app:layout_constraintEnd_toStartOf="@+id/record_sum"
-            app:layout_constraintTop_toTopOf="@+id/record_sum"
-            tools:text="7 x 5.22 BYN" />
+    <TextView
+        android:id="@+id/record_quantity_and_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_half"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@+id/record_sum"
+        app:layout_constraintEnd_toStartOf="@+id/record_sum"
+        app:layout_constraintTop_toTopOf="@+id/record_sum"
+        tools:text="7 x 5.22 BYN" />
 
 
-        <TextView
-            android:id="@+id/record_sum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_half"
-            android:text="@{ExtensionsKt.toAmount(item.sum, item.currency)}"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="36.54 BYN" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</layout>
+    <TextView
+        android:id="@+id/record_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_half"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="36.54 BYN" />
+</androidx.constraintlayout.widget.ConstraintLayout>

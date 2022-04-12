@@ -1,27 +1,32 @@
 package by.cisza.smartlistproto.ui.recordlist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.cisza.smartlistproto.databinding.FragmentRecordListBinding
-import by.cisza.smartlistproto.model.ReceiptItem
-import by.cisza.smartlistproto.model.SmartRecord
+import by.cisza.smartlistproto.data.entities.ReceiptItem
+import by.cisza.smartlistproto.data.entities.SmartRecord
 import by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogFragment
 import by.cisza.smartlistproto.ui.record.RecordDialogFragment
+import by.cisza.smartlistproto.utils.updateReceipt
+import by.cisza.smartlistproto.utils.updateSmartList
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.*
+
+const val TAG = "MyDebug"
 
 class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener,
-    FulfilmentDialogFragment.FulfilmentDialogListener {
+    FulfilmentDialogFragment.FulfilmentDialogListener, View.OnClickListener {
 
     private lateinit var viewModel: RecordListViewModel
 
@@ -57,8 +62,10 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(binding) {
-            bottomSheet = BottomSheetBehavior.from(this!!.bottomSheetReceipt)
+//        updateView(viewModel.viewState.value)
+
+        binding?.apply {
+            bottomSheet = BottomSheetBehavior.from(bottomSheetReceipt)
         }
 
         bottomSheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -70,8 +77,7 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
 
             }
 
-        }
-        )
+        })
     }
 
     override fun onDestroyView() {
@@ -89,13 +95,23 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
     }
 
     private fun updateView(state: RecordListViewState) {
-        if (binding != null) with(binding) {
-            this!!.state = state
-            recordController = viewModel
+        requireNotNull(binding)
+        binding?.apply {
+
+            floatingActionButton.setOnClickListener(this@RecordListFragment::onClick)
+            list.updateSmartList(
+                recordController = viewModel,
+                source = state.records)
+            receiptList.updateReceipt(
+                source = state.receiptItems
+            )
+            bottomSheetReceipt.visibility = if (state.isReceiptVisible) View.VISIBLE else View.INVISIBLE
+            totalSum.text = state.totalSum.toString()
+
             state.itemToFulfil?.let {
                 FulfilmentDialogFragment(
-                    this@RecordListFragment  as FulfilmentDialogFragment.FulfilmentDialogListener,
-                    it
+                    listener = this@RecordListFragment as FulfilmentDialogFragment.FulfilmentDialogListener,
+                    record = it
                 ).show(childFragmentManager, "fulfilmentDialog")
             }
             if (state.showNewRecordDialog)
@@ -104,6 +120,10 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
                     "NewRecordDialog"
                 )
         }
+    }
+
+    override fun onClick(v: View?) {
+        viewModel.addRecord()
     }
 
 }

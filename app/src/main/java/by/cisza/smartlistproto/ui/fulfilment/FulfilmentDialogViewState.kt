@@ -1,7 +1,7 @@
 package by.cisza.smartlistproto.ui.fulfilment
 
-import by.cisza.smartlistproto.model.ReceiptItem
-import by.cisza.smartlistproto.model.SmartRecord
+import by.cisza.smartlistproto.data.entities.ReceiptItem
+import by.cisza.smartlistproto.data.entities.SmartRecord
 import by.cisza.smartlistproto.utils.round
 
 data class FulfilmentDialogViewState(

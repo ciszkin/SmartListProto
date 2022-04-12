@@ -2,7 +2,7 @@ package by.cisza.smartlistproto.ui.record
 
 import androidx.lifecycle.ViewModel
 import by.cisza.smartlistproto.R
-import by.cisza.smartlistproto.model.SmartRecord
+import by.cisza.smartlistproto.data.entities.SmartRecord
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.*

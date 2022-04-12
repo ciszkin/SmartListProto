@@ -20,4 +20,5 @@
     <string name="cancel_new_record_button">Cancel</string>
     <string name="bottom_sheet_total_label">Total:</string>
     <string name="fulfil_button">Fulfil</string>
+    <string name="total_sum">Total sum:</string>
 </resources>

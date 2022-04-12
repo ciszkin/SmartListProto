@@ -4,22 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.databinding.DialogFulfilmentBinding
-import by.cisza.smartlistproto.model.Receipt.*
-import by.cisza.smartlistproto.model.ReceiptItem
-import by.cisza.smartlistproto.model.SmartRecord
+import by.cisza.smartlistproto.data.entities.ReceiptItem
+import by.cisza.smartlistproto.data.entities.SmartRecord
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FulfilmentDialogFragment(
     private val listener: FulfilmentDialogListener,
     private val record: SmartRecord
-) : DialogFragment() {
+) : DialogFragment(), View.OnClickListener {
 
     private var _binding: DialogFulfilmentBinding? = null
     private val binding get() = _binding
@@ -48,26 +50,12 @@ class FulfilmentDialogFragment(
         _binding = DialogFulfilmentBinding.inflate(inflater)
         viewModel.setCurrentRecord(record)
 
-        binding?.apply {
-            model = viewModel
-            fulfilQuantity.setOnClickListener {
-                fulfilQuantity.editText?.selectAll()
-            }
-            fulfilPrice.setOnClickListener {
-                fulfilPrice.editText?.selectAll()
-            }
-            fulfilQuantity.editText?.setText(record.quantity.toString())
-            fulfilPrice.editText?.setText(record.price.toString())
+        setupView()
 
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.viewState.collect { state ->
-                        binding?.state = state
-                        state.receiptItem?.let {
-                            listener.onDialogResult(it)
-                            dismiss()
-                        }
-                    }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewState.collect { state ->
+                    updateView(state)
                 }
             }
         }
@@ -75,9 +63,45 @@ class FulfilmentDialogFragment(
         return binding!!.root
     }
 
+    private fun setupView() {
+        binding?.apply {
+            quantityEditText.doOnTextChanged(viewModel::onQuantityChanged)
+            priceEditText.doOnTextChanged(viewModel::onPriceChanged)
+            fulfilButton.setOnClickListener(this@FulfilmentDialogFragment::onClick)
+
+            fulfilQuantity.editText?.setText(record.quantity.toString())
+            fulfilPrice.editText?.setText(record.price.toString())
+        }
+    }
+
+    private fun updateView(state: FulfilmentDialogViewState) {
+        binding?.apply {
+            fulfilLabel.text = state.currentRecord.title
+            totalSum.text = state.totalSum.toString()
+
+        }
+
+        state.receiptItem?.let {
+            listener.onDialogResult(it)
+            dismiss()
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.fulfil_button -> viewModel.fulfilRecord()
+            R.id.cancel_button -> viewModel.returnRecord()
+            R.id.quantity_edit_text, R.id.price_edit_text -> {
+                (v as EditText).let {
+                    it.setSelection(0, it.text.length)
+                }
+            }
+        }
     }
 }

@@ -5,7 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.cisza.smartlistproto.databinding.ItemReceiptRecordBinding
-import by.cisza.smartlistproto.model.ReceiptItem
+import by.cisza.smartlistproto.data.entities.ReceiptItem
+import by.cisza.smartlistproto.utils.toAmount
 
 class ReceiptItemsAdapter(
     source: List<ReceiptItem>,
@@ -40,14 +41,17 @@ class ReceiptItemsAdapter(
         ViewHolder(binding.root) {
         override fun bind(item: Any) {
             binding.apply {
-                this.item = item as ReceiptItem
+                recordName.text = (item as ReceiptItem).title
+                val recordQuantityAndPriceString = "${item.quantity} x ${item.price} ${item.currency}"
+                recordQuantityAndPrice.text = recordQuantityAndPriceString
+                recordSum.text = item.sum.toAmount(item.currency)
 //                onItemClick = View.OnClickListener { view ->
 //                    view.showDescriptionDialog(item)
 //                }
 //                onDoneClick = View.OnClickListener { view ->
 //                    recordController.setIsDone(item)
 //                }
-                executePendingBindings()
+//                executePendingBindings()
             }
         }
     }
