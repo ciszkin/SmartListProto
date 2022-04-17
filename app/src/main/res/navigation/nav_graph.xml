@@ -3,26 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/RecordListFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/RecordListFragment"
         android:name="by.cisza.smartlistproto.ui.recordlist.RecordListFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_record_list">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_record_list"/>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="by.cisza.smartlistproto.SecondFragment"
+        android:id="@+id/ReceiptListFragment"
+        android:name="by.cisza.smartlistproto.ui.receiptlist.ReceiptListFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_receipt_list"/>
+    <fragment
+        android:id="@+id/ReceiptItemListFragment"
+        android:name="by.cisza.smartlistproto.ui.receiptitemlist.ReceiptItemListFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_receipt_list"/>
 </navigation>

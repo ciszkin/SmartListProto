@@ -19,24 +19,24 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun receiptItemDao(): ReceiptItemDao
 
-    companion object {
-        private var instance: AppDatabase? = null
-
-        operator fun invoke(context: Context): AppDatabase {
-
-            return instance
-                ?: createInstance(
-                    context
-                ).also {
-                    instance = it
-                }
-        }
-
-        private fun createInstance(context: Context) =
-            Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                "smart_list_proto.db"
-            ).build()
-    }
+//    companion object {
+//        private var instance: AppDatabase? = null
+//
+//        operator fun invoke(context: Context): AppDatabase {
+//
+//            return instance
+//                ?: createInstance(
+//                    context
+//                ).also {
+//                    instance = it
+//                }
+//        }
+//
+//        private fun createInstance(context: Context) =
+//            Room.databaseBuilder(
+//                context.applicationContext,
+//                AppDatabase::class.java,
+//                "smart_list_proto.db"
+//            ).build()
+//    }
 }

@@ -2,21 +2,25 @@ package by.cisza.smartlistproto.data.repository
 
 import by.cisza.smartlistproto.data.db.dao.SmartRecordDao
 import by.cisza.smartlistproto.data.entities.SmartRecord
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import by.cisza.smartlistproto.data.repository.mappers.SmartRecordMappers
+import javax.inject.Inject
 
-class SmartRecordStore(
+class SmartRecordStore @Inject constructor(
     private val recordDao: SmartRecordDao
 ) {
 
-    fun getSmartRecords() : Flow<List<SmartRecord>> = flow {
-        recordDao.getAll().map {
-            Mappers.mapDbSmartRecordToSmartRecord(it)
+    fun getSmartRecords() : List<SmartRecord> {
+        return recordDao.getAll().map {
+            SmartRecordMappers.mapDbSmartRecordToSmartRecord(it)
         }
     }
 
     fun addSmartRecord(record: SmartRecord) {
-        recordDao.insertAll(Mappers.mapSmartRecordToDbSmartRecord(record))
+        recordDao.insertAll(SmartRecordMappers.mapSmartRecordToDbSmartRecord(record))
+    }
+
+    fun updateSmartRecord(record: SmartRecord) {
+        recordDao.update(SmartRecordMappers.mapSmartRecordToDbSmartRecord(record))
     }
 
 }

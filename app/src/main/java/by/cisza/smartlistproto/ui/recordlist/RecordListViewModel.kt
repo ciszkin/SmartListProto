@@ -1,17 +1,35 @@
 package by.cisza.smartlistproto.ui.recordlist
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import by.cisza.smartlistproto.data.domain.smartrecord.AddSmartRecordUseCase
+import by.cisza.smartlistproto.data.domain.smartrecord.GetSmartRecordsUseCase
+import by.cisza.smartlistproto.data.domain.smartrecord.UpdateSmartRecordUseCase
 import by.cisza.smartlistproto.data.entities.ReceiptItem
 import by.cisza.smartlistproto.data.entities.SmartRecord
 import by.cisza.smartlistproto.utils.round
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
+@HiltViewModel
+class RecordListViewModel @Inject constructor(
+    private val getSmartRecordsUseCase: GetSmartRecordsUseCase,
+    private val addSmartRecordUseCase: AddSmartRecordUseCase,
+    private val updateSmartRecordUseCase: UpdateSmartRecordUseCase
+) : ViewModel(), SmartRecordAdapter.RecordController {
 
     private val _viewState = MutableStateFlow(RecordListViewState())
     val viewState: StateFlow<RecordListViewState>
         get() = _viewState
+
+    init {
+        viewModelScope.launch {
+            _viewState.value = _viewState.value.copy(records = getSmartRecordsUseCase(Unit))
+        }
+    }
 
     fun addRecord(record: SmartRecord?) {
         if (record != null) {
@@ -20,6 +38,9 @@ class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
                 newList.addAll(it.records)
                 newList.add(record)
                 it.copy(records = newList, showNewRecordDialog = false)
+            }
+            viewModelScope.launch {
+                addSmartRecordUseCase(record)
             }
         } else {
             _viewState.value = _viewState.value.copy(showNewRecordDialog = false)
@@ -35,7 +56,7 @@ class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
         }
     }
 
-    fun fulfilRecord(receiptItem: ReceiptItem) {
+    fun handleReceiptItem(receiptItem: ReceiptItem) {
 
         val record = _viewState.value.records.find {
             it.id == receiptItem.recordId
@@ -80,6 +101,18 @@ class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
             itemToFulfil = null
         )
 
+        if (record != null) updateDbRecord(record)
+
+    }
+
+    private fun updateDbRecord(record: SmartRecord) {
+        viewModelScope.launch {
+            _viewState.value.records.find {
+                it.id == record.id
+            }?.let {
+                updateSmartRecordUseCase(it)
+            }
+        }
     }
 
     override fun restoreRecord(record: SmartRecord) {
@@ -88,6 +121,7 @@ class RecordListViewModel : ViewModel(), SmartRecordAdapter.RecordController {
                 if (it == record) it.copy(completedQuantity = 0.0) else it
             })
         }
+        updateDbRecord(record)
     }
 
     override fun fulfilRecord(item: SmartRecord) {

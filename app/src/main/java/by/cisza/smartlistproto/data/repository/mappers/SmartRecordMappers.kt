@@ -1,11 +1,11 @@
-package by.cisza.smartlistproto.data.repository
+package by.cisza.smartlistproto.data.repository.mappers
 
 import by.cisza.smartlistproto.data.db.entities.DbSmartRecord
 import by.cisza.smartlistproto.data.entities.SmartRecord
 
-object Mappers {
+object SmartRecordMappers {
 
-    const val LIST_SEPARATOR: String = "<*>"
+    private const val LIST_SEPARATOR: String = "<*>"
 
     fun mapDbSmartRecordToSmartRecord(from: DbSmartRecord) : SmartRecord {
         return SmartRecord(
@@ -34,12 +34,16 @@ object Mappers {
     }
 
     private fun getTagsString(tags: List<String>): String? {
-        val stringBuilder = StringBuilder()
-        tags.forEachIndexed { index, string ->
-            stringBuilder.append(string).append(LIST_SEPARATOR)
+        if (tags.isNotEmpty()) {
+            val stringBuilder = StringBuilder()
+            tags.forEachIndexed { _, string ->
+                stringBuilder.append(string).append(LIST_SEPARATOR)
+            }
+
+            return stringBuilder.substring(0, stringBuilder.lastIndex - LIST_SEPARATOR.length)
         }
 
-        return stringBuilder.substring(0, stringBuilder.lastIndex - LIST_SEPARATOR.length)
+        return null
     }
 
 

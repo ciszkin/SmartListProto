@@ -68,8 +68,9 @@ class FulfilmentDialogFragment(
             quantityEditText.doOnTextChanged(viewModel::onQuantityChanged)
             priceEditText.doOnTextChanged(viewModel::onPriceChanged)
             fulfilButton.setOnClickListener(this@FulfilmentDialogFragment::onClick)
+            cancelButton.setOnClickListener(this@FulfilmentDialogFragment::onClick)
 
-            fulfilQuantity.editText?.setText(record.quantity.toString())
+            fulfilQuantity.editText?.setText(record.quantityLeft.toString())
             fulfilPrice.editText?.setText(record.price.toString())
         }
     }

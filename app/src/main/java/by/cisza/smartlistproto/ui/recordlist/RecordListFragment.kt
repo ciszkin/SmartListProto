@@ -1,15 +1,13 @@
 package by.cisza.smartlistproto.ui.recordlist
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.cisza.smartlistproto.databinding.FragmentRecordListBinding
@@ -20,15 +18,17 @@ import by.cisza.smartlistproto.ui.record.RecordDialogFragment
 import by.cisza.smartlistproto.utils.updateReceipt
 import by.cisza.smartlistproto.utils.updateSmartList
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 const val TAG = "MyDebug"
 
+@AndroidEntryPoint
 class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener,
     FulfilmentDialogFragment.FulfilmentDialogListener, View.OnClickListener {
 
-    private lateinit var viewModel: RecordListViewModel
+    private val viewModel: RecordListViewModel by viewModels()
 
     private lateinit var bottomSheet: BottomSheetBehavior<ConstraintLayout>
 
@@ -53,7 +53,7 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this).get(RecordListViewModel::class.java)
+//        viewModel = ViewModelProvider(this).get(RecordListViewModel::class.java)
         _binding = FragmentRecordListBinding.inflate(inflater, container, false)
 
         return binding!!.root
@@ -91,7 +91,7 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
     }
 
     override fun onDialogResult(receiptItem: ReceiptItem) {
-        viewModel.fulfilRecord(receiptItem)
+        viewModel.handleReceiptItem(receiptItem)
     }
 
     private fun updateView(state: RecordListViewState) {
