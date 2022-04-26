@@ -6,7 +6,7 @@ import by.cisza.smartlistproto.data.db.entities.DbReceiptItem
 @Dao
 interface ReceiptItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg receiptItems: List<DbReceiptItem>)
+    fun insertAll(receiptItems: List<DbReceiptItem>)
 
     @Delete
     fun delete(receiptItem: DbReceiptItem)

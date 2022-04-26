@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.ui.fulfilment
+package by.cisza.smartlistproto.ui.fulfilmentdialog
 
 import by.cisza.smartlistproto.data.entities.ReceiptItem
 import by.cisza.smartlistproto.data.entities.SmartRecord

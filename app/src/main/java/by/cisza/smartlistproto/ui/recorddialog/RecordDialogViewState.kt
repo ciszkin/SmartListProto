@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.ui.record
+package by.cisza.smartlistproto.ui.recorddialog
 
 import by.cisza.smartlistproto.data.entities.SmartRecord
 

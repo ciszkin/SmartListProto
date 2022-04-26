@@ -1,5 +1,6 @@
 package by.cisza.smartlistproto.ui.recordlist
 
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ class SmartRecordAdapter(
         fun restoreRecord(record: SmartRecord)
         fun fulfilRecord(item: SmartRecord)
         fun addRecord()
+        fun showStatistics(record: SmartRecord)
     }
 
     companion object {
@@ -89,14 +91,19 @@ class SmartRecordAdapter(
 
                 recordName.text = item.title
 
+                val visibility = if (item.quantityLeft == 0.0) View.INVISIBLE else View.VISIBLE
                 val quantityAndPrice = "${item.quantityLeft} x ${item.price.toAmount(item.currency)}"
                 recordQuantityAndPrice.text = quantityAndPrice
-                recordQuantityAndPrice.visibility = if (item.quantityLeft == 0.0) View.INVISIBLE else View.VISIBLE
+                recordQuantityAndPrice.visibility = visibility
 
                 recordDescription.text = item.description
+                recordDescription.visibility = visibility
 
                 recordSum.text = item.sum.toAmount(item.currency)
-                recordSum.visibility = if (item.quantityLeft == 0.0) View.INVISIBLE else View.VISIBLE
+                recordSum.visibility = visibility
+
+                progressIndicator.progress = (item.completedQuantity / item.quantity * 100).toInt()
+                progressIndicator.visibility = visibility
             }
         }
     }
@@ -105,7 +112,10 @@ class SmartRecordAdapter(
         MaterialAlertDialogBuilder(this.context)
             .setTitle(record.title)
             .setMessage(record.description)
-            .setNeutralButton("OK", null)
+            .setNeutralButton("Show Statistics") { _, _ ->
+                recordController.showStatistics(record)
+            }
+            .setPositiveButton("Ok",null)
             .show()
     }
 

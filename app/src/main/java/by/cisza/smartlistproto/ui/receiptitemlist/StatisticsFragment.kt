@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.ui.receiptlist
+package by.cisza.smartlistproto.ui.receiptitemlist
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,11 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import by.cisza.smartlistproto.databinding.FragmentReceiptListBinding
+import androidx.navigation.fragment.navArgs
+import by.cisza.smartlistproto.R
+import by.cisza.smartlistproto.databinding.FragmentStatisticsBinding
 
-class ReceiptListFragment : Fragment() {
+class StatisticsFragment : Fragment() {
 
-    private var _binding: FragmentReceiptListBinding? = null
+    private val args: StatisticsFragmentArgs by navArgs()
+
+    private var _binding: FragmentStatisticsBinding? = null
 
     private val binding get() = _binding
 
@@ -19,7 +23,7 @@ class ReceiptListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentReceiptListBinding.inflate(inflater, container, false)
+        _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
         return binding!!.root
 
     }
@@ -28,10 +32,12 @@ class ReceiptListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.apply {
+            toolbar.title = getString(R.string.fragment_statistics_title, args.recordId.toString())
             toolbar.setNavigationOnClickListener { _ ->
-                findNavController().popBackStack()
+                findNavController().navigateUp()
             }
         }
+
     }
 
     override fun onDestroyView() {

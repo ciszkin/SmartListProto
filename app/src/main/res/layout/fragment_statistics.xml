@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.receiptlist.ReceiptListFragment">
+    tools:context=".ui.receiptitemlist.StatisticsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -23,8 +23,7 @@
             android:elevation="@dimen/elevation"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:popupTheme="@style/Theme.SmartListProto.PopupOverlay"
-            app:title="@string/fragment_receipt_list_title" />
-
+            app:title="@string/fragment_statistics_title" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -10,16 +10,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.databinding.FragmentRecordListBinding
 import by.cisza.smartlistproto.data.entities.ReceiptItem
 import by.cisza.smartlistproto.data.entities.SmartRecord
-import by.cisza.smartlistproto.ui.fulfilment.FulfilmentDialogFragment
-import by.cisza.smartlistproto.ui.record.RecordDialogFragment
+import by.cisza.smartlistproto.ui.fulfilmentdialog.FulfilmentDialogFragment
+import by.cisza.smartlistproto.ui.recorddialog.RecordDialogFragment
 import by.cisza.smartlistproto.utils.updateReceipt
 import by.cisza.smartlistproto.utils.updateSmartList
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 const val TAG = "MyDebug"
@@ -32,28 +34,13 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
 
     private lateinit var bottomSheet: BottomSheetBehavior<ConstraintLayout>
 
-
     private var _binding: FragmentRecordListBinding? = null
     private val binding get() = _binding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.viewState.collect { state ->
-                    updateView(state)
-                }
-            }
-        }
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        viewModel = ViewModelProvider(this).get(RecordListViewModel::class.java)
         _binding = FragmentRecordListBinding.inflate(inflater, container, false)
 
         return binding!!.root
@@ -64,8 +51,16 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
 
 //        updateView(viewModel.viewState.value)
 
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewState.collect { state ->
+                    updateView(state)
+                }
+            }
+        }
+
         binding?.apply {
-            bottomSheet = BottomSheetBehavior.from(bottomSheetReceipt)
+            bottomSheet = BottomSheetBehavior.from(bottomSheetReceiptLayout.bottomSheetReceipt)
         }
 
         bottomSheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -99,14 +94,15 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
         binding?.apply {
 
             floatingActionButton.setOnClickListener(this@RecordListFragment::onClick)
+            bottomSheetReceiptLayout.saveReceiptButton.setOnClickListener(this@RecordListFragment::onClick)
             list.updateSmartList(
                 recordController = viewModel,
                 source = state.records)
-            receiptList.updateReceipt(
+            bottomSheetReceiptLayout.receiptList.updateReceipt(
                 source = state.receiptItems
             )
-            bottomSheetReceipt.visibility = if (state.isReceiptVisible) View.VISIBLE else View.INVISIBLE
-            totalSum.text = state.totalSum.toString()
+            bottomSheetReceiptLayout.bottomSheetReceipt.visibility = if (state.isReceiptVisible) View.VISIBLE else View.INVISIBLE
+            bottomSheetReceiptLayout.totalSum.text = state.totalSum.toString()
 
             state.itemToFulfil?.let {
                 FulfilmentDialogFragment(
@@ -114,16 +110,24 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
                     record = it
                 ).show(childFragmentManager, "fulfilmentDialog")
             }
+            state.itemToShowStatistics?.let {
+                val direction = RecordListFragmentDirections.showStatistics(it.id)
+                findNavController().navigate(direction)
+            }
             if (state.showNewRecordDialog)
                 RecordDialogFragment(this@RecordListFragment).show(
                     childFragmentManager,
                     "NewRecordDialog"
                 )
+            if (state.showSaveReceiptCompletion) view?.let { Snackbar.make(it, "Receipt saved successfully!", Snackbar.LENGTH_SHORT).show() }
         }
     }
 
     override fun onClick(v: View?) {
-        viewModel.addRecord()
+        when(v?.id) {
+            R.id.floating_action_button -> viewModel.addRecord()
+            R.id.save_receipt_button -> viewModel.saveReceipt()
+        }
     }
 
 }

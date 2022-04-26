@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.ui.record
+package by.cisza.smartlistproto.ui.recorddialog
 
 import androidx.lifecycle.ViewModel
 import by.cisza.smartlistproto.R

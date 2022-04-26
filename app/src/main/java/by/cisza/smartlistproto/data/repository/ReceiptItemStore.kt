@@ -9,13 +9,13 @@ class ReceiptItemStore @Inject constructor(
     private val receiptItemDao: ReceiptItemDao
 ) {
 
-    fun getReceiptItemsByReceiptId(receiptId: Long) : List<ReceiptItem> {
+    fun getReceiptItemsByReceiptId(receiptId: Long): List<ReceiptItem> {
         return receiptItemDao.getByReceiptId(receiptId).map {
             ReceiptItemMappers.mapDbSReceiptItemToReceiptItem(it)
         }
     }
 
-    fun getReceiptItemsBySmartRecordId(recordId: Long) : List<ReceiptItem> {
+    fun getReceiptItemsBySmartRecordId(recordId: Long): List<ReceiptItem> {
         return receiptItemDao.getBySmartRecordId(recordId).map {
             ReceiptItemMappers.mapDbSReceiptItemToReceiptItem(it)
         }

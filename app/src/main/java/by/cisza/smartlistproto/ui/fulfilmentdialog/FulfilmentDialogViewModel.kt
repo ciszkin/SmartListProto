@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.ui.fulfilment
+package by.cisza.smartlistproto.ui.fulfilmentdialog
 
 import androidx.lifecycle.ViewModel
 import by.cisza.smartlistproto.data.entities.ReceiptItem

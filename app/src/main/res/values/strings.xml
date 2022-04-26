@@ -21,4 +21,8 @@
     <string name="bottom_sheet_total_label">Total:</string>
     <string name="fulfil_button">Fulfil</string>
     <string name="total_sum">Total sum:</string>
+    <string name="fragment_record_list_title">Smart List</string>
+    <string name="fragment_statistics_title">Statistics: %1s</string>
+    <string name="fragment_receipt_list_title">Receipt List</string>
+    <string name="save_receipt_button">Save Receipt</string>
 </resources>

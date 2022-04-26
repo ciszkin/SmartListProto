@@ -1,5 +1,9 @@
 package by.cisza.smartlistproto.utils
 
+import androidx.annotation.IdRes
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavArgs
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.cisza.smartlistproto.data.entities.ReceiptItem
@@ -57,3 +61,7 @@ fun RecyclerView.updateSmartList(recordController: SmartRecordAdapter.RecordCont
 fun TextInputLayout.errorText(errorRes: Int) {
     if (errorRes != 0) error = this.context.getString(errorRes)
 }
+
+//fun Fragment.goTo(@IdRes direction: Int, args: NavArgs) {
+//    findNavController().navigate(direction, args)
+//}

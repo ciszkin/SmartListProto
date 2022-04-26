@@ -1,4 +1,4 @@
-package by.cisza.smartlistproto.ui.fulfilment
+package by.cisza.smartlistproto.ui.fulfilmentdialog
 
 import android.os.Bundle
 import android.view.LayoutInflater

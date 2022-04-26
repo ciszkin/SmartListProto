@@ -4,21 +4,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.cisza.smartlistproto.data.domain.smartrecord.AddSmartRecordUseCase
 import by.cisza.smartlistproto.data.domain.smartrecord.GetSmartRecordsUseCase
+import by.cisza.smartlistproto.data.domain.receipt.SaveReceiptUseCase
 import by.cisza.smartlistproto.data.domain.smartrecord.UpdateSmartRecordUseCase
+import by.cisza.smartlistproto.data.entities.Receipt
 import by.cisza.smartlistproto.data.entities.ReceiptItem
 import by.cisza.smartlistproto.data.entities.SmartRecord
 import by.cisza.smartlistproto.utils.round
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class RecordListViewModel @Inject constructor(
     private val getSmartRecordsUseCase: GetSmartRecordsUseCase,
     private val addSmartRecordUseCase: AddSmartRecordUseCase,
-    private val updateSmartRecordUseCase: UpdateSmartRecordUseCase
+    private val updateSmartRecordUseCase: UpdateSmartRecordUseCase,
+    private val saveReceiptUseCase: SaveReceiptUseCase
 ) : ViewModel(), SmartRecordAdapter.RecordController {
 
     private val _viewState = MutableStateFlow(RecordListViewState())
@@ -27,13 +32,15 @@ class RecordListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _viewState.value = _viewState.value.copy(records = getSmartRecordsUseCase(Unit))
+            _viewState.update {
+                it.copy(records = getSmartRecordsUseCase(Unit))
+            }
         }
     }
 
     fun addRecord(record: SmartRecord?) {
         if (record != null) {
-            _viewState.value = _viewState.value.let {
+            _viewState.update {
                 val newList = mutableListOf<SmartRecord>()
                 newList.addAll(it.records)
                 newList.add(record)
@@ -43,12 +50,14 @@ class RecordListViewModel @Inject constructor(
                 addSmartRecordUseCase(record)
             }
         } else {
-            _viewState.value = _viewState.value.copy(showNewRecordDialog = false)
+            _viewState.update {
+                it.copy(showNewRecordDialog = false)
+            }
         }
     }
 
     fun removeRecord(record: SmartRecord) {
-        _viewState.value = _viewState.value.let {
+        _viewState.update {
             val newList = mutableListOf<SmartRecord>()
             newList.addAll(it.records)
             newList.remove(record)
@@ -92,14 +101,18 @@ class RecordListViewModel @Inject constructor(
             if (it == item) it.copy(quantity = it.quantity + receiptItem.quantity) else it
         } as MutableList
 
-        if (newReceiptItems.find {it.recordId == receiptItem.recordId && it.price == receiptItem.price} == null) newReceiptItems.add(receiptItem)
-
-        _viewState.value = _viewState.value.copy(
-            records = newRecords,
-            receiptItems = newReceiptItems,
-            totalSum = newReceiptItems.sumOf { it.sum }.round(2),
-            itemToFulfil = null
+        if (newReceiptItems.find { it.recordId == receiptItem.recordId && it.price == receiptItem.price } == null) newReceiptItems.add(
+            receiptItem
         )
+
+        _viewState.update {
+            it.copy(
+                records = newRecords,
+                receiptItems = newReceiptItems,
+                totalSum = newReceiptItems.sumOf { it.sum }.round(2),
+                itemToFulfil = null
+            )
+        }
 
         if (record != null) updateDbRecord(record)
 
@@ -116,8 +129,8 @@ class RecordListViewModel @Inject constructor(
     }
 
     override fun restoreRecord(record: SmartRecord) {
-        _viewState.value.apply {
-            _viewState.value = this.copy(records = this.records.map {
+        _viewState.update { state ->
+            state.copy(records = state.records.map {
                 if (it == record) it.copy(completedQuantity = 0.0) else it
             })
         }
@@ -125,11 +138,41 @@ class RecordListViewModel @Inject constructor(
     }
 
     override fun fulfilRecord(item: SmartRecord) {
-        _viewState.value = _viewState.value.copy(itemToFulfil = item)
+        _viewState.update {
+            it.copy(itemToFulfil = item)
+        }
     }
 
     override fun addRecord() {
-        _viewState.value = _viewState.value.copy(showNewRecordDialog = true)
+        _viewState.update {
+            it.copy(showNewRecordDialog = true)
+        }
+    }
+
+    override fun showStatistics(record: SmartRecord) {
+        _viewState.update {
+            it.copy(itemToShowStatistics = record)
+        }
+    }
+
+    fun saveReceipt() {
+        val receipt = Receipt(
+            id = Calendar.getInstance().timeInMillis,
+            date = Calendar.getInstance().time.toString(),
+            items = _viewState.value.receiptItems
+        )
+
+        val savingJob = viewModelScope.launch {
+            saveReceiptUseCase.invoke(receipt)
+        }
+
+        savingJob.invokeOnCompletion { cause ->
+            if (cause == null) {
+                _viewState.update {
+                    it.copy(receiptItems = emptyList(), showSaveReceiptCompletion = true)
+                }
+            }
+        }
     }
 
 }
