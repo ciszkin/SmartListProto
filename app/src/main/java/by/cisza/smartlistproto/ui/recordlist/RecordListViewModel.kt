@@ -1,5 +1,6 @@
 package by.cisza.smartlistproto.ui.recordlist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.cisza.smartlistproto.data.domain.smartrecord.AddSmartRecordUseCase
@@ -11,9 +12,7 @@ import by.cisza.smartlistproto.data.entities.ReceiptItem
 import by.cisza.smartlistproto.data.entities.SmartRecord
 import by.cisza.smartlistproto.utils.round
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -153,6 +152,9 @@ class RecordListViewModel @Inject constructor(
         _viewState.update {
             it.copy(itemToShowStatistics = record)
         }
+        _viewState.update {
+            it.copy(itemToShowStatistics = null)
+        }
     }
 
     fun saveReceipt() {
@@ -171,8 +173,16 @@ class RecordListViewModel @Inject constructor(
                 _viewState.update {
                     it.copy(receiptItems = emptyList(), showSaveReceiptCompletion = true)
                 }
+                _viewState.update {
+                    it.copy(showSaveReceiptCompletion = false)
+                }
             }
         }
     }
 
+//    fun clearShowSaveReceiptCompletionFlag() {
+//        _viewState.update {
+//            it.copy(showSaveReceiptCompletion = false)
+//        }
+//    }
 }

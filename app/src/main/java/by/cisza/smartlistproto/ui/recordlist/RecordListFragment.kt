@@ -1,6 +1,7 @@
 package by.cisza.smartlistproto.ui.recordlist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -89,6 +90,12 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
         viewModel.handleReceiptItem(receiptItem)
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.e(TAG, "from: ${this.javaClass.simpleName} we're here!")
+
+    }
+
     private fun updateView(state: RecordListViewState) {
         requireNotNull(binding)
         binding?.apply {
@@ -101,7 +108,12 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
             bottomSheetReceiptLayout.receiptList.updateReceipt(
                 source = state.receiptItems
             )
-            bottomSheetReceiptLayout.bottomSheetReceipt.visibility = if (state.isReceiptVisible) View.VISIBLE else View.INVISIBLE
+            if (state.isReceiptVisible) {
+                bottomSheetReceiptLayout.bottomSheetReceipt.visibility = View.VISIBLE
+            } else {
+                bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+                bottomSheetReceiptLayout.bottomSheetReceipt.visibility = View.INVISIBLE
+            }
             bottomSheetReceiptLayout.totalSum.text = state.totalSum.toString()
 
             state.itemToFulfil?.let {
@@ -113,13 +125,19 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
             state.itemToShowStatistics?.let {
                 val direction = RecordListFragmentDirections.showStatistics(it.id)
                 findNavController().navigate(direction)
+
             }
             if (state.showNewRecordDialog)
                 RecordDialogFragment(this@RecordListFragment).show(
                     childFragmentManager,
                     "NewRecordDialog"
                 )
-            if (state.showSaveReceiptCompletion) view?.let { Snackbar.make(it, "Receipt saved successfully!", Snackbar.LENGTH_SHORT).show() }
+            if (state.showSaveReceiptCompletion) {
+                view?.let {
+                    Snackbar.make(it, "Receipt saved successfully!", Snackbar.LENGTH_SHORT).show()
+                }
+//                viewModel.clearShowSaveReceiptCompletionFlag()
+            }
         }
     }
 
@@ -129,5 +147,4 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
             R.id.save_receipt_button -> viewModel.saveReceipt()
         }
     }
-
 }

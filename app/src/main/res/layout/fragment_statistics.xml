@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.receiptitemlist.StatisticsFragment">
+    tools:context=".ui.statistics.StatisticsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -26,6 +26,25 @@
             app:title="@string/fragment_statistics_title" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/record_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
+
+        <include
+            layout="@layout/item_record" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingBottom="@dimen/margin_double"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/record_layout" />
 
     <ProgressBar
         android:id="@+id/loading"

@@ -16,4 +16,7 @@ interface SmartRecordDao {
 
     @Query("SELECT * FROM dbsmartrecord")
     fun getAll(): List<DbSmartRecord>
+
+    @Query("SELECT * FROM dbsmartrecord WHERE id == :recordId")
+    fun get(recordId: Long): DbSmartRecord
 }

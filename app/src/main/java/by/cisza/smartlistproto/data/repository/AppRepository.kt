@@ -11,4 +11,5 @@ interface AppRepository {
     fun getReceiptItems(recordId: Long) : List<ReceiptItem>
     fun getReceipts() : List<Receipt>
     fun addReceipt(receipt: Receipt)
+    fun getSmartRecordById(recordId: Long): SmartRecord
 }

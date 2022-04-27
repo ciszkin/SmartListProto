@@ -16,18 +16,18 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/recordListFragment"
-            app:popUpToInclusive="true"/>
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+
     <fragment
         android:id="@+id/receiptListFragment"
         android:name="by.cisza.smartlistproto.ui.receiptlist.ReceiptListFragment"
         android:label="ReceiptListFragment"
         tools:layout="@layout/fragment_receipt_list"/>
+
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="by.cisza.smartlistproto.ui.receiptitemlist.StatisticsFragment"
+        android:name="by.cisza.smartlistproto.ui.statistics.StatisticsFragment"
         android:label="StatisticsFragment"
         tools:layout="@layout/fragment_statistics">
 

@@ -1,11 +1,9 @@
 package by.cisza.smartlistproto.ui.recordlist
 
-import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.databinding.ItemRecordBinding
 import by.cisza.smartlistproto.databinding.ItemSumBinding
 import by.cisza.smartlistproto.data.entities.SmartRecord
@@ -112,8 +110,9 @@ class SmartRecordAdapter(
         MaterialAlertDialogBuilder(this.context)
             .setTitle(record.title)
             .setMessage(record.description)
-            .setNeutralButton("Show Statistics") { _, _ ->
+            .setNeutralButton("Show Statistics") { dialog, _ ->
                 recordController.showStatistics(record)
+                dialog.dismiss()
             }
             .setPositiveButton("Ok",null)
             .show()

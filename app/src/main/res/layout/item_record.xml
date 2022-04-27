@@ -2,101 +2,92 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/margin_half"
+    >
 
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/is_done"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="@dimen/margin_half"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_card"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/record_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_half"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/record_quantity_and_price"
+        app:layout_constraintStart_toEndOf="@id/is_done"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/record_quantity_and_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_half"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="7 x 5.22 BYN" />
+
+
+    <TextView
+        android:id="@+id/record_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_half"
+        android:ellipsize="end"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/record_sum"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/is_done"
+        app:layout_constraintTop_toBottomOf="@+id/record_name"
+        tools:text="Description" />
+
+    <TextView
+        android:id="@+id/record_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_half"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/record_description"
+        app:layout_constraintTop_toBottomOf="@+id/record_quantity_and_price"
+        tools:text="36.54 BYN" />
+
+    <ProgressBar
+        android:id="@+id/progress_indicator"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_marginHorizontal="@dimen/margin_regular"
         android:layout_marginVertical="@dimen/margin_half"
+        android:progress="50"
+        android:progressBackgroundTint="@color/grey"
+        android:progressTint="@color/teal_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/record_sum" />
 
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/is_done"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="@dimen/margin_half"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/record_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_half"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/record_quantity_and_price"
-            app:layout_constraintStart_toEndOf="@id/is_done"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Name" />
-
-        <TextView
-            android:id="@+id/record_quantity_and_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_half"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="7 x 5.22 BYN" />
-
-
-        <TextView
-            android:id="@+id/record_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_half"
-            android:ellipsize="end"
-            android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/record_sum"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/is_done"
-            app:layout_constraintTop_toBottomOf="@+id/record_name"
-            tools:text="Description" />
-
-        <TextView
-            android:id="@+id/record_sum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_half"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/record_description"
-            app:layout_constraintTop_toBottomOf="@+id/record_quantity_and_price"
-            tools:text="36.54 BYN" />
-
-        <ProgressBar
-            android:id="@+id/progress_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:layout_marginVertical="@dimen/margin_half"
-            android:layout_marginHorizontal="@dimen/margin_regular"
-            android:progressTint="@color/teal_700"
-            android:progressBackgroundTint="@color/grey"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/record_sum"
-            android:progress="50"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="@dimen/margin_double"
-            android:background="@color/grey"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/margin_double"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+

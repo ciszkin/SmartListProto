@@ -23,4 +23,8 @@ class SmartRecordStore @Inject constructor(
         recordDao.update(SmartRecordMappers.mapSmartRecordToDbSmartRecord(record))
     }
 
+    fun getSmartRecordById(recordId: Long) : SmartRecord {
+        return SmartRecordMappers.mapDbSmartRecordToSmartRecord(recordDao.get(recordId))
+    }
+
 }

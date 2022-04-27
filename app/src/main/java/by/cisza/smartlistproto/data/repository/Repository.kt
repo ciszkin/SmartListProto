@@ -39,4 +39,8 @@ class Repository @Inject constructor(
         receiptStore.addReceipt(receipt)
     }
 
+    override fun getSmartRecordById(recordId: Long): SmartRecord {
+        return recordStore.getSmartRecordById(recordId)
+    }
+
 }
