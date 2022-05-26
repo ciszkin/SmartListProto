@@ -3,17 +3,20 @@ package by.cisza.smartlistproto.ui.recorddialog
 import androidx.lifecycle.ViewModel
 import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.data.entities.SmartRecord
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.*
+import javax.inject.Inject
 
-class RecordDialogViewModel : ViewModel() {
+@HiltViewModel
+class RecordDialogViewModel @Inject constructor() : ViewModel() {
 
     private val _viewState = MutableStateFlow(RecordDialogViewState())
     val viewState: StateFlow<RecordDialogViewState>
         get() = _viewState
 
-    fun createRecord(): SmartRecord = SmartRecord(
+    private fun createRecord(): SmartRecord = SmartRecord(
         id = Calendar.getInstance().timeInMillis,
         title = viewState.value.title,
         description = viewState.value.description,
@@ -63,7 +66,7 @@ class RecordDialogViewModel : ViewModel() {
 
     }
     
-    fun onCancelClick() {
-        _viewState.value = _viewState.value.copy(cancelDialog = true)
-    }
+//    fun onCancelClick() {
+//        _viewState.value = _viewState.value.copy(cancelDialog = true)
+//    }
 }

@@ -27,15 +27,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/record_layout"
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
-
-        <include
-            layout="@layout/item_record" />
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
+        app:layout_constraintStart_toStartOf="parent"
+         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
@@ -44,7 +42,7 @@
         android:paddingBottom="@dimen/margin_double"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/record_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/chart" />
 
     <ProgressBar
         android:id="@+id/loading"

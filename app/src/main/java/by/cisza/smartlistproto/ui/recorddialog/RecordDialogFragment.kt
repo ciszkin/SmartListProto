@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -23,11 +24,7 @@ class RecordDialogFragment(private val listener: RecordDialogListener) : DialogF
     private var _binding: DialogRecordBinding? = null
     private val binding get() = _binding
 
-    private val viewModel: RecordDialogViewModel by lazy {
-        ViewModelProvider(this).get(
-            RecordDialogViewModel::class.java
-        )
-    }
+    private val viewModel: RecordDialogViewModel by viewModels()
 
     interface RecordDialogListener {
         fun onDialogResult(record: SmartRecord?)
@@ -82,12 +79,8 @@ class RecordDialogFragment(private val listener: RecordDialogListener) : DialogF
             newRecordTitle.errorText(state.titleErrorRes)
         }
 
-        if (state.cancelDialog) {
-            listener.onDialogResult(null)
-            dismiss()
-        }
         if (state.createdRecord != null) {
-            listener.onDialogResult(viewModel.createRecord())
+            listener.onDialogResult(state.createdRecord)
             dismiss()
         }
     }
@@ -100,7 +93,10 @@ class RecordDialogFragment(private val listener: RecordDialogListener) : DialogF
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.create_button -> viewModel.onCreateClick()
-            R.id.cancel_button -> viewModel.onCancelClick()
+            R.id.cancel_button -> {
+                listener.onDialogResult(null)
+                dismiss()
+            }
             R.id.quantity_edit_text -> {
                 (v as EditText).let {
                     it.setSelection(0, it.text.length)

@@ -1,6 +1,5 @@
 package by.cisza.smartlistproto.ui.recordlist
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.cisza.smartlistproto.data.domain.smartrecord.AddSmartRecordUseCase
@@ -26,8 +25,10 @@ class RecordListViewModel @Inject constructor(
 ) : ViewModel(), SmartRecordAdapter.RecordController {
 
     private val _viewState = MutableStateFlow(RecordListViewState())
-    val viewState: StateFlow<RecordListViewState>
-        get() = _viewState
+    val viewState = _viewState.asStateFlow()
+
+    private val _event = MutableSharedFlow<RecordListEvent>()
+    val event = _event.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -43,16 +44,18 @@ class RecordListViewModel @Inject constructor(
                 val newList = mutableListOf<SmartRecord>()
                 newList.addAll(it.records)
                 newList.add(record)
-                it.copy(records = newList, showNewRecordDialog = false)
+//                it.copy(records = newList, showNewRecordDialog = false)
+                it.copy(records = newList)
             }
             viewModelScope.launch {
                 addSmartRecordUseCase(record)
             }
-        } else {
-            _viewState.update {
-                it.copy(showNewRecordDialog = false)
-            }
         }
+//        else {
+//            _viewState.update {
+//                it.copy(showNewRecordDialog = false)
+//            }
+//        }
     }
 
     fun removeRecord(record: SmartRecord) {
@@ -64,7 +67,14 @@ class RecordListViewModel @Inject constructor(
         }
     }
 
-    fun handleReceiptItem(receiptItem: ReceiptItem) {
+    fun handleReceiptItem(receiptItem: ReceiptItem?) {
+
+        if (receiptItem == null) {
+            viewModelScope.launch {
+                _event.emit(UpdateViewEvent(viewState.value))
+            }
+            return
+        }
 
         val record = _viewState.value.records.find {
             it.id == receiptItem.recordId
@@ -108,8 +118,7 @@ class RecordListViewModel @Inject constructor(
             it.copy(
                 records = newRecords,
                 receiptItems = newReceiptItems,
-                totalSum = newReceiptItems.sumOf { it.sum }.round(2),
-                itemToFulfil = null
+                totalSum = newReceiptItems.sumOf { it.sum }.round(2)
             )
         }
 
@@ -137,23 +146,14 @@ class RecordListViewModel @Inject constructor(
     }
 
     override fun fulfilRecord(item: SmartRecord) {
-        _viewState.update {
-            it.copy(itemToFulfil = item)
-        }
-    }
-
-    override fun addRecord() {
-        _viewState.update {
-            it.copy(showNewRecordDialog = true)
+        viewModelScope.launch {
+            _event.emit(FulfilEvent(item))
         }
     }
 
     override fun showStatistics(record: SmartRecord) {
-        _viewState.update {
-            it.copy(itemToShowStatistics = record)
-        }
-        _viewState.update {
-            it.copy(itemToShowStatistics = null)
+        viewModelScope.launch {
+            _event.emit(ShowStatisticsEvent(record))
         }
     }
 
@@ -164,25 +164,21 @@ class RecordListViewModel @Inject constructor(
             items = _viewState.value.receiptItems
         )
 
-        val savingJob = viewModelScope.launch {
+        val savingJob =
+        viewModelScope.launch {
             saveReceiptUseCase.invoke(receipt)
+            _event.emit(ReceiptSavedEvent(
+                message = "Receipt saved successfully!"
+            ))
+
         }
 
         savingJob.invokeOnCompletion { cause ->
             if (cause == null) {
                 _viewState.update {
-                    it.copy(receiptItems = emptyList(), showSaveReceiptCompletion = true)
-                }
-                _viewState.update {
-                    it.copy(showSaveReceiptCompletion = false)
+                    it.copy(receiptItems = emptyList())
                 }
             }
         }
     }
-
-//    fun clearShowSaveReceiptCompletionFlag() {
-//        _viewState.update {
-//            it.copy(showSaveReceiptCompletion = false)
-//        }
-//    }
 }

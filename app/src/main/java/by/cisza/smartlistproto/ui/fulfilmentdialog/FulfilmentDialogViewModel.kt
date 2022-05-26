@@ -3,10 +3,13 @@ package by.cisza.smartlistproto.ui.fulfilmentdialog
 import androidx.lifecycle.ViewModel
 import by.cisza.smartlistproto.data.entities.ReceiptItem
 import by.cisza.smartlistproto.data.entities.SmartRecord
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class FulfilmentDialogViewModel : ViewModel() {
+@HiltViewModel
+class FulfilmentDialogViewModel @Inject constructor() : ViewModel() {
 
     private val _viewState = MutableStateFlow(FulfilmentDialogViewState())
     val viewState: StateFlow<FulfilmentDialogViewState>
@@ -38,20 +41,6 @@ class FulfilmentDialogViewModel : ViewModel() {
                     title = it.currentRecord.title,
                     quantity = it.quantity,
                     price = it.price,
-                    currency = it.currentRecord.currency
-                )
-            )
-        }
-    }
-
-    fun returnRecord() {
-        _viewState.value = _viewState.value.let {
-            it.copy(
-                receiptItem = ReceiptItem(
-                    recordId = it.currentRecord.id,
-                    title = it.currentRecord.title,
-                    quantity = 0.0,
-                    price = it.currentRecord.price,
                     currency = it.currentRecord.currency
                 )
             )

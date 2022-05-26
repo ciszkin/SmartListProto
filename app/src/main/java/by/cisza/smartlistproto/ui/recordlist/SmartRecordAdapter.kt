@@ -19,7 +19,6 @@ class SmartRecordAdapter(
     interface RecordController {
         fun restoreRecord(record: SmartRecord)
         fun fulfilRecord(item: SmartRecord)
-        fun addRecord()
         fun showStatistics(record: SmartRecord)
     }
 

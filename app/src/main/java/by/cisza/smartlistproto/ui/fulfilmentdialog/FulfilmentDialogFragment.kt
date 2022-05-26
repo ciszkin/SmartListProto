@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -26,14 +27,10 @@ class FulfilmentDialogFragment(
     private var _binding: DialogFulfilmentBinding? = null
     private val binding get() = _binding
 
-    private val viewModel: FulfilmentDialogViewModel by lazy {
-        ViewModelProvider(this).get(
-            FulfilmentDialogViewModel::class.java
-        )
-    }
+    private val viewModel: FulfilmentDialogViewModel by viewModels()
 
     interface FulfilmentDialogListener {
-        fun onDialogResult(receiptItem: ReceiptItem)
+        fun onDialogResult(receiptItem: ReceiptItem?)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +94,10 @@ class FulfilmentDialogFragment(
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.fulfil_button -> viewModel.fulfilRecord()
-            R.id.cancel_button -> viewModel.returnRecord()
+            R.id.cancel_button -> {
+                listener.onDialogResult(null)
+                dismiss()
+            }
             R.id.quantity_edit_text, R.id.price_edit_text -> {
                 (v as EditText).let {
                     it.setSelection(0, it.text.length)
