@@ -39,9 +39,6 @@ class SmartRecordAdapter(
                     it.quantityLeft > 0.0
                 }
             )
-//            list.sortByDescending {
-//                it.quantityLeft > 0
-//            }
             val sum = list.sumOf {
                 ((it.quantity - it.completedQuantity) * it.price).round(2)
             }
@@ -147,5 +144,4 @@ class SmartRecordAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(list[position])
 
     override fun getItemCount() = list.size
-
 }

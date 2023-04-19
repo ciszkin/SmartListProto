@@ -10,10 +10,8 @@ data class Receipt(
     val date: String,
     val items: List<ReceiptItem>
 ): Parcelable {
-
     @IgnoredOnParcel
     val sum = items.sumOf {
         it.sum
     }
-
 }

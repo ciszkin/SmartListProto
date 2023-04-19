@@ -1,13 +1,9 @@
 package by.cisza.smartlistproto.data.repository.mappers
 
-import by.cisza.smartlistproto.data.db.entities.DbReceipt
 import by.cisza.smartlistproto.data.db.entities.DbReceiptItem
-import by.cisza.smartlistproto.data.entities.Receipt
 import by.cisza.smartlistproto.data.entities.ReceiptItem
 
 object ReceiptItemMappers {
-
-    const val LIST_SEPARATOR: String = "<*>"
 
     fun mapDbSReceiptItemToReceiptItem(from: DbReceiptItem) : ReceiptItem {
         return ReceiptItem(
@@ -29,5 +25,4 @@ object ReceiptItemMappers {
             price = from.price
         )
     }
-
 }

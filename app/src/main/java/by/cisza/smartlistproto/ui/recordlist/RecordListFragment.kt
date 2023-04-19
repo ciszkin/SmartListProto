@@ -20,6 +20,7 @@ import by.cisza.smartlistproto.ui.fulfilmentdialog.FulfilmentDialogFragment
 import by.cisza.smartlistproto.ui.recorddialog.RecordDialogFragment
 import by.cisza.smartlistproto.utils.updateReceipt
 import by.cisza.smartlistproto.utils.updateSmartList
+import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,13 +51,9 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        updateView(viewModel.viewState.value)
-
         binding?.apply {
             bottomSheet = BottomSheetBehavior.from(bottomSheetReceiptLayout.bottomSheetReceipt)
         }
-
         bottomSheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
 
@@ -65,7 +62,6 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
 
             }
-
         })
 
         lifecycleScope.launch {
@@ -116,7 +112,6 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
 
     override fun onDialogResult(record: SmartRecord?) {
         viewModel.addRecord(record)
-//        bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun onDialogResult(receiptItem: ReceiptItem?) {
@@ -149,7 +144,6 @@ class RecordListFragment : Fragment(), RecordDialogFragment.RecordDialogListener
                 bottomSheetReceiptLayout.bottomSheetReceipt.visibility = View.INVISIBLE
             }
             bottomSheetReceiptLayout.totalSum.text = state.totalSum.toString()
-
         }
     }
 

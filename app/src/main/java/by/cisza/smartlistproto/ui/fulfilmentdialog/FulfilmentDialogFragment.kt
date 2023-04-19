@@ -9,14 +9,12 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.databinding.DialogFulfilmentBinding
 import by.cisza.smartlistproto.data.entities.ReceiptItem
 import by.cisza.smartlistproto.data.entities.SmartRecord
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FulfilmentDialogFragment(
@@ -35,7 +33,6 @@ class FulfilmentDialogFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
         setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
     }
 

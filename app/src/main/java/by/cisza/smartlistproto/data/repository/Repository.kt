@@ -42,5 +42,4 @@ class Repository @Inject constructor(
     override fun getSmartRecordById(recordId: Long): SmartRecord {
         return recordStore.getSmartRecordById(recordId)
     }
-
 }

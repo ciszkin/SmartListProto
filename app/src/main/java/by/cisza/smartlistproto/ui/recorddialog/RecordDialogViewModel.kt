@@ -45,14 +45,6 @@ class RecordDialogViewModel @Inject constructor() : ViewModel() {
         _viewState.value = _viewState.value.copy(price = s.toString().toDoubleOrNull() ?: 0.0)
     }
 
-//    fun validate() : Boolean {
-//        _viewState.value = _viewState.value.let {
-//            it.copy(titleErrorRes = if (it.title.isEmpty() || it.title.isBlank()) R.string.empty_tytle_error else 0)
-//        }
-//
-//            return _viewState.value.titleErrorRes == 0
-//    }
-
     fun onCreateClick() {
         val errorRes = _viewState.value.let {
             if (it.title.isEmpty() || it.title.isBlank()) R.string.empty_tytle_error else 0
@@ -65,8 +57,4 @@ class RecordDialogViewModel @Inject constructor() : ViewModel() {
         }
 
     }
-    
-//    fun onCancelClick() {
-//        _viewState.value = _viewState.value.copy(cancelDialog = true)
-//    }
 }

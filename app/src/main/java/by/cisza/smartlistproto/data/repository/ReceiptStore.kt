@@ -22,5 +22,4 @@ class ReceiptStore @Inject constructor(
     fun updateReceipt(receipt: Receipt) {
         receiptDao.update(ReceiptMappers.mapReceiptToDbReceipt(receipt))
     }
-
 }

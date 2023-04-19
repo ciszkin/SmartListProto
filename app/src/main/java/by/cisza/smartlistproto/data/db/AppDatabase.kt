@@ -1,8 +1,6 @@
 package by.cisza.smartlistproto.data.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import by.cisza.smartlistproto.data.db.dao.ReceiptDao
 import by.cisza.smartlistproto.data.db.dao.ReceiptItemDao
@@ -18,25 +16,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun receiptDao(): ReceiptDao
 
     abstract fun receiptItemDao(): ReceiptItemDao
-
-//    companion object {
-//        private var instance: AppDatabase? = null
-//
-//        operator fun invoke(context: Context): AppDatabase {
-//
-//            return instance
-//                ?: createInstance(
-//                    context
-//                ).also {
-//                    instance = it
-//                }
-//        }
-//
-//        private fun createInstance(context: Context) =
-//            Room.databaseBuilder(
-//                context.applicationContext,
-//                AppDatabase::class.java,
-//                "smart_list_proto.db"
-//            ).build()
-//    }
 }

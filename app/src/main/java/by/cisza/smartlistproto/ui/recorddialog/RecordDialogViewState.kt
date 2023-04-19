@@ -10,7 +10,6 @@ data class RecordDialogViewState(
     val price: Double = 0.0,
     val titleErrorRes: Int  = 0,
     val createdRecord: SmartRecord? = null
-//    val cancelDialog: Boolean = false
 ) {
     val showError = titleErrorRes != 0
 }

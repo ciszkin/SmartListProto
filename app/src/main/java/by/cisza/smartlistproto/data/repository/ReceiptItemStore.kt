@@ -27,5 +27,4 @@ class ReceiptItemStore @Inject constructor(
             ReceiptItemMappers.mapReceiptItemToDbReceiptItem(it, receiptId)
         })
     }
-
 }

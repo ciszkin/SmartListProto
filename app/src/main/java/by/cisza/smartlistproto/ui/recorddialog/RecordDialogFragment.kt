@@ -9,14 +9,12 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.cisza.smartlistproto.R
 import by.cisza.smartlistproto.databinding.DialogRecordBinding
 import by.cisza.smartlistproto.data.entities.SmartRecord
 import by.cisza.smartlistproto.utils.errorText
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RecordDialogFragment(private val listener: RecordDialogListener) : DialogFragment(), View.OnClickListener {
@@ -32,7 +30,6 @@ class RecordDialogFragment(private val listener: RecordDialogListener) : DialogF
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
         setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_Dialog_MinWidth)
     }
 
@@ -59,11 +56,6 @@ class RecordDialogFragment(private val listener: RecordDialogListener) : DialogF
     private fun setupView() {
         binding?.apply {
             newRecordQuantity.editText?.setText(viewModel.viewState.value.quantity.toString())
-//            newRecordQuantity.editText?.apply {
-//                setOnClickListener {
-//                    setSelection(0, this.text.length)
-//                }
-//            }
             titleEditText.doOnTextChanged(viewModel::onTitleChanged)
             descriptionEditText.doOnTextChanged(viewModel::onDescriptionChanged)
             quantityEditText.doOnTextChanged(viewModel::onQuantityChanged)

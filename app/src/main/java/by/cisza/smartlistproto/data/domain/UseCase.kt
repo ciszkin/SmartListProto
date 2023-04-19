@@ -5,7 +5,6 @@ import kotlinx.coroutines.withContext
 
 abstract class UseCase<in P, R> {
 
-
     suspend operator fun invoke(params: P): R {
         return withContext(Dispatchers.IO) { doWork(params) }
     }

@@ -3,10 +3,7 @@
 
     <corners
         android:topLeftRadius="@dimen/margin_regular"
-        android:topRightRadius="@dimen/margin_regular"
-        />
-    <solid
-        android:color="#E7E7E7"
-        />
+        android:topRightRadius="@dimen/margin_regular" />
+    <solid android:color="#E7E7E7" />
 
 </shape>

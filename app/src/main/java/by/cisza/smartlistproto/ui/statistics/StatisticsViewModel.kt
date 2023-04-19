@@ -49,6 +49,5 @@ class StatisticsViewModel @Inject constructor(
                 state.copy(loading = false)
             }
         }
-
     }
 }

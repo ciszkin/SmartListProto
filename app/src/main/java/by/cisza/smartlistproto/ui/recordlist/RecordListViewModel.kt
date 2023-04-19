@@ -44,18 +44,12 @@ class RecordListViewModel @Inject constructor(
                 val newList = mutableListOf<SmartRecord>()
                 newList.addAll(it.records)
                 newList.add(record)
-//                it.copy(records = newList, showNewRecordDialog = false)
                 it.copy(records = newList)
             }
             viewModelScope.launch {
                 addSmartRecordUseCase(record)
             }
         }
-//        else {
-//            _viewState.update {
-//                it.copy(showNewRecordDialog = false)
-//            }
-//        }
     }
 
     fun removeRecord(record: SmartRecord) {
